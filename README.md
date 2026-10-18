@@ -160,6 +160,8 @@ Se incorporaron al repositorio los siguientes documentos:
 - [Plan de pruebas funcionales y de integración](docs/pruebas/plan-de-pruebas.md): **41 casos de prueba** con acciones, resultados esperados y estados de seguimiento.
 - [Aplicación y mecanismo de respaldo](docs/informe/aplicacion-y-respaldo.md).
 - [Objetivos de recuperación RTO/RPO](docs/informe/rto-rpo.md).
+- [Registro de ejecución y evidencias](docs/pruebas/registro-ejecucion.md): estado real de pruebas locales, capturas faltantes y próximos pasos.
+- [Borrador unificado del informe final](docs/informe/borrador-informe-final.md): base redactada para integrar el modelo de Maca y las pruebas contra Atlas.
 
 Las capturas se organizarán en `docs/capturas/aplicacion/`, `docs/capturas/atlas/` y `docs/capturas/backup/`, sin exponer información privada.
 
