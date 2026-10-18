@@ -108,7 +108,7 @@ Comprobar que la aplicación por consola desarrollada en Node.js ejecute las ope
 | BAK-04 | Ejecutar una segunda vez el mismo día. | Advierte que la carpeta de la fecha ya existe y no sobrescribe el respaldo anterior. | Sí | Pendiente |
 | BAK-05 | Restaurar una copia sobre una base **diferente** de ensayo. | `mongorestore` recupera datos; colecciones, cantidades, estado y pedidos históricos coinciden. | Sí | Pendiente |
 | BAK-06 | Cronometrar respaldo y, si se ensaya recuperación, restauración y vuelta a consultas. | Se registran duraciones reales; no se presenta el RTO objetivo como medido. | Sí | Pendiente |
-| SEG-01 | Revisar repositorio, `.gitignore`, `.env.example` y capturas. | No hay URI completa, contraseña ni archivo `.env` publicado. | No | **Parcial:** árbol público, historial de archivos y exclusiones revisados; falta revisión visual de todas las capturas y ZIP |
+| SEG-01 | Revisar repositorio, `.gitignore`, `.env.example` y capturas. | No hay URI completa, contraseña ni archivo `.env` publicado. | No | **Parcial:** repositorio y archivos de configuración comprobados; Ricardo confirmó revisión visual de las 8 capturas actuales. Falta revisión del ZIP final y de futuras capturas de Atlas |
 
 
 ### Seguimiento de evidencia local (18/10/2026)
@@ -117,7 +117,7 @@ Comprobar que la aplicación por consola desarrollada en Node.js ejecute las ope
 - **APP-02:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-02-opcion-invalida.png`.
 - **APP-03:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-03-sin-uri.png`.
 - **BAK-01:** salida observada `Falta configurar MONGODB_URI en el archivo .env.` y código `1`; captura publicada en `docs/capturas/backup/BAK-01-error-backup.png`.
-- **SEG-01:** árbol del repositorio y archivos de texto revisados parcialmente; comprobación visual de imágenes y revisión del ZIP pendientes.
+- **SEG-01:** revisión del árbol, historial y archivos de texto realizada; Ricardo confirmó revisión visual de las ocho imágenes publicadas el 18/10/2026. Falta revisar el ZIP final y las futuras capturas de Atlas.
 
 No se afirma que se hayan ejecutado pruebas con una conexión real a MongoDB Atlas.
 
