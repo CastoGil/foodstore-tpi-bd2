@@ -11,7 +11,7 @@ Este registro complementa el [plan de 41 pruebas](plan-de-pruebas.md). La inform
 
 | Caso | Resultado conocido | Estado documentado | Evidencia en GitHub |
 |---|---|---|---|
-| **APP-01** | `npm start`, menú principal y navegación por Clientes, Productos y Pedidos; regreso al principal comprobado. **No consta captura del cierre definitivo** | **Parcial** | [Principal](../capturas/aplicacion/APP-01-menu-principal.png), [Productos](../capturas/aplicacion/APP-01-menu-productos.png), [Pedidos](../capturas/aplicacion/APP-01-menu-pedidos.png), [Navegación completa](../capturas/aplicacion/APP-01-navegacion-completa.png) |
+| **APP-01** | `npm start`, navegación por Clientes, Productos y Pedidos y regreso al principal; opción `0` produjo `Programa finalizado.` y retorno a PowerShell sin errores | **Aprobado** | [Principal](../capturas/aplicacion/APP-01-menu-principal.png), [Productos](../capturas/aplicacion/APP-01-menu-productos.png), [Pedidos](../capturas/aplicacion/APP-01-menu-pedidos.png), [Navegación completa](../capturas/aplicacion/APP-01-navegacion-completa.png), [Salida final](../capturas/aplicacion/APP-01-salida-programa.png) |
 | **APP-02** | Ricardo confirmó que una opción inválida muestra mensaje y conserva el menú | **Aprobado (informado por ejecutor)** | [Opción inválida](../capturas/aplicacion/APP-02-opcion-invalida.png) |
 | **APP-03** | Ricardo confirmó que la ausencia de URI produce error controlado y permite continuar | **Aprobado (informado por ejecutor)** | [Sin URI](../capturas/aplicacion/APP-03-sin-uri.png) |
 | **BAK-01** | `backup.ps1` mostró `Falta configurar MONGODB_URI en el archivo .env.` y `$LASTEXITCODE` devolvió `1` | **Aprobado (resultado observado)** | [Error de respaldo](../capturas/backup/BAK-01-error-backup.png) |
@@ -19,21 +19,21 @@ Este registro complementa el [plan de 41 pruebas](plan-de-pruebas.md). La inform
 
 **Fecha de ejecución:** 18/10/2026 para los ensayos observados o informados en la conversación. La hora exacta de cada caso no se consignó en una planilla; no se inventa. La mera existencia del archivo PNG no demuestra su contenido: revisar visualmente las capturas antes de presentar la evidencia final.
 
-**Conteo de evidencias publicadas:** 7 imágenes, seis en `docs/capturas/aplicacion/` y una en `docs/capturas/backup/`.
+**Conteo de evidencias publicadas:** 8 imágenes, siete en `docs/capturas/aplicacion/` y una en `docs/capturas/backup/`.
 
-## 2. APP-01 — Única acción local de navegación pendiente
+## 2. APP-01 — Validación completada
 
-Para terminar APP-01, abrir la terminal en la raíz del proyecto y ejecutar:
+APP-01 fue completada el 18/10/2026. El comando ejecutado desde la raíz del proyecto fue:
 
 ```powershell
 npm start
 ```
 
-Desde el menú principal elegir `0` y presionar Enter. El programa debe mostrar `Programa finalizado.` y devolver el control al prompt `PS ...>` sin error. Guardar captura como:
+Desde el menú principal se ingresó `0` y se observó `Programa finalizado.` seguido del retorno al prompt `PS ...>` sin errores. Captura subida:
 
 `docs/capturas/aplicacion/APP-01-salida-programa.png`
 
-Solo después de confirmar ese resultado, cambiar APP-01 de `Parcial` a `Aprobado`.
+APP-01 queda registrada como **Aprobada**, respaldada por los resultados observados y la captura publicada.
 
 ## 3. SEG-01 — Seguridad: revisión documental
 
@@ -67,7 +67,7 @@ No se considerarán aprobadas hasta registrar resultados reales y evidencias en 
 
 ## 6. Próximos pasos
 
-1. Guardar y subir la captura de salida final de APP-01.
+1. APP-01 completada: conservar la evidencia de salida en la entrega final.
 2. Comprobar visualmente los siete archivos PNG y cerrar SEG-01 cuando corresponda.
 3. Esperar la configuración de Atlas de Maca y ejecutar las pruebas de integración.
 4. Completar las capturas de las colecciones, los tipos BSON y el respaldo real.
