@@ -40,13 +40,13 @@ Comprobar que la aplicación por consola desarrollada en Node.js ejecute las ope
 
 ## 4. Casos de prueba
 
-**Total: 41 casos.** Los casos que requieren Atlas se mantienen como pendientes hasta ejecutarlos. APP-02 y APP-03 cuentan con resultados correctos informados por Ricardo y archivos de evidencia subidos; BAK-01 se observó en la consola y su captura está publicada. APP-01 requiere confirmar la salida; SEG-01 requiere completar la auditoría final. Ver [registro de ejecución](registro-ejecucion.md).
+**Total: 41 casos.** Los casos que requieren Atlas se mantienen como pendientes hasta ejecutarlos. APP-02 y APP-03 cuentan con resultados correctos informados por Ricardo y archivos de evidencia subidos; BAK-01 se observó en la consola y su captura está publicada. APP-01 ya cuenta con navegación y salida final verificadas; SEG-01 requiere completar la auditoría final. Ver [registro de ejecución](registro-ejecucion.md).
 
 ### A. Aplicación y conexión
 
 | ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
 |---|---|---|:---:|---|
-| APP-01 | Ejecutar `npm start` y recorrer los menús 1, 2, 3 y volver con 0. | Navegación correcta y salida ordenada. | No | **Parcial:** navegación acreditada por 4 capturas; falta verificar/capturar salida final (`APP-01-salida-programa.png`) |
+| APP-01 | Ejecutar `npm start` y recorrer los menús 1, 2, 3 y volver con 0. | Navegación correcta y salida ordenada. | No | **Aprobado:** navegación y cierre del programa verificados; evidencia `APP-01-salida-programa.png` publicada junto con las capturas de los menús |
 | APP-02 | Ingresar una opción inválida. | Mensaje explicativo y continuidad del menú. | No | **Aprobado (informado por Ricardo):** evidencia `APP-02-opcion-invalida.png` publicada |
 | APP-03 | Ejecutar una operación con `MONGODB_URI` vacía. | Informa falta de URI sin mostrar credenciales ni cerrar abruptamente el menú. | No | **Aprobado (informado por Ricardo):** evidencia `APP-03-sin-uri.png` publicada |
 | ATL-01 | Configurar URI válida y ejecutar una consulta. | Se conecta, completa `ping` y consulta la base `foodstore_tpi`. | Sí | Pendiente |
@@ -113,7 +113,7 @@ Comprobar que la aplicación por consola desarrollada en Node.js ejecute las ope
 
 ### Seguimiento de evidencia local (18/10/2026)
 
-- **APP-01:** capturas publicadas de menú principal, Clientes/Productos/Pedidos y navegación; **salida final pendiente**.
+- **APP-01:** **Aprobado**; captura de salida final `APP-01-salida-programa.png` publicada, además de las capturas de navegación.
 - **APP-02:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-02-opcion-invalida.png`.
 - **APP-03:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-03-sin-uri.png`.
 - **BAK-01:** salida observada `Falta configurar MONGODB_URI en el archivo .env.` y código `1`; captura publicada en `docs/capturas/backup/BAK-01-error-backup.png`.
