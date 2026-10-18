@@ -40,15 +40,15 @@ Comprobar que la aplicación por consola desarrollada en Node.js ejecute las ope
 
 ## 4. Casos de prueba
 
-**Total: 41 casos.** Los casos que requieren Atlas se mantienen como pendientes hasta ejecutarlos. Los casos locales citados en el README requieren su evidencia correspondiente.
+**Total: 41 casos.** Los casos que requieren Atlas se mantienen como pendientes hasta ejecutarlos. APP-02 y APP-03 cuentan con resultados correctos informados por Ricardo y archivos de evidencia subidos; BAK-01 se observó en la consola y su captura está publicada. APP-01 requiere confirmar la salida; SEG-01 requiere completar la auditoría final. Ver [registro de ejecución](registro-ejecucion.md).
 
 ### A. Aplicación y conexión
 
 | ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
 |---|---|---|:---:|---|
-| APP-01 | Ejecutar `npm start` y recorrer los menús 1, 2, 3 y volver con 0. | Navegación correcta y salida ordenada. | No | Verificación local informada; falta evidencia |
-| APP-02 | Ingresar una opción inválida. | Mensaje explicativo y continuidad del menú. | No | Verificación local informada; falta evidencia |
-| APP-03 | Ejecutar una operación con `MONGODB_URI` vacía. | Informa falta de URI sin mostrar credenciales ni cerrar abruptamente el menú. | No | Verificación local informada; falta evidencia |
+| APP-01 | Ejecutar `npm start` y recorrer los menús 1, 2, 3 y volver con 0. | Navegación correcta y salida ordenada. | No | **Parcial:** navegación acreditada por 4 capturas; falta verificar/capturar salida final (`APP-01-salida-programa.png`) |
+| APP-02 | Ingresar una opción inválida. | Mensaje explicativo y continuidad del menú. | No | **Aprobado (informado por Ricardo):** evidencia `APP-02-opcion-invalida.png` publicada |
+| APP-03 | Ejecutar una operación con `MONGODB_URI` vacía. | Informa falta de URI sin mostrar credenciales ni cerrar abruptamente el menú. | No | **Aprobado (informado por Ricardo):** evidencia `APP-03-sin-uri.png` publicada |
 | ATL-01 | Configurar URI válida y ejecutar una consulta. | Se conecta, completa `ping` y consulta la base `foodstore_tpi`. | Sí | Pendiente |
 | ATL-02 | Verificar el usuario de Atlas y sus permisos de trabajo. | Inserción y consulta permitidas en la base asignada. | Sí | Pendiente |
 
@@ -102,13 +102,24 @@ Comprobar que la aplicación por consola desarrollada en Node.js ejecute las ope
 
 | ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
 |---|---|---|:---:|---|
-| BAK-01 | Ejecutar `backup.ps1` sin `MONGODB_URI`. | Error explicativo y código de salida `1`. | No | Verificación local informada; falta evidencia |
+| BAK-01 | Ejecutar `backup.ps1` sin `MONGODB_URI`. | Error explicativo y código de salida `1`. | No | **Aprobado:** mensaje esperado y código `1` observados; `BAK-01-error-backup.png` publicado |
 | BAK-02 | Ejecutar `backup.ps1` con Atlas conectado. | Código `0`, carpeta `resguardos_tpi/AAAA-MM-DD/`, archivos `.bson` y `resultado_backup.txt`. | Sí | Pendiente |
 | BAK-03 | Verificar contenidos del respaldo. | Archivos de las tres colecciones, sus metadatos y documentos activos e inactivos. | Sí | Pendiente |
 | BAK-04 | Ejecutar una segunda vez el mismo día. | Advierte que la carpeta de la fecha ya existe y no sobrescribe el respaldo anterior. | Sí | Pendiente |
 | BAK-05 | Restaurar una copia sobre una base **diferente** de ensayo. | `mongorestore` recupera datos; colecciones, cantidades, estado y pedidos históricos coinciden. | Sí | Pendiente |
 | BAK-06 | Cronometrar respaldo y, si se ensaya recuperación, restauración y vuelta a consultas. | Se registran duraciones reales; no se presenta el RTO objetivo como medido. | Sí | Pendiente |
-| SEG-01 | Revisar repositorio, `.gitignore`, `.env.example` y capturas. | No hay URI completa, contraseña ni archivo `.env` publicado. | No | Pendiente |
+| SEG-01 | Revisar repositorio, `.gitignore`, `.env.example` y capturas. | No hay URI completa, contraseña ni archivo `.env` publicado. | No | **Parcial:** árbol público, historial de archivos y exclusiones revisados; falta revisión visual de todas las capturas y ZIP |
+
+
+### Seguimiento de evidencia local (18/10/2026)
+
+- **APP-01:** capturas publicadas de menú principal, Clientes/Productos/Pedidos y navegación; **salida final pendiente**.
+- **APP-02:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-02-opcion-invalida.png`.
+- **APP-03:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-03-sin-uri.png`.
+- **BAK-01:** salida observada `Falta configurar MONGODB_URI en el archivo .env.` y código `1`; captura publicada en `docs/capturas/backup/BAK-01-error-backup.png`.
+- **SEG-01:** árbol del repositorio y archivos de texto revisados parcialmente; comprobación visual de imágenes y revisión del ZIP pendientes.
+
+No se afirma que se hayan ejecutado pruebas con una conexión real a MongoDB Atlas.
 
 ## 5. Verificación complementaria en MongoDB Atlas
 
