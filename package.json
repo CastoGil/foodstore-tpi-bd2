@@ -1,0 +1,18 @@
+{
+  "name": "foodstore-tpi-bd2",
+  "version": "1.0.0",
+  "description": "TPI de Bases de Datos II - Food Store con MongoDB Atlas",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "decimal.js": "^10.6.0",
+    "dotenv": "^18.0.8",
+    "mongodb": "^7.7.0"
+  }
+}

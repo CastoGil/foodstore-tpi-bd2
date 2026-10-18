@@ -1,0 +1,4 @@
+node_modules/
+.env
+resguardos_tpi/
+*.log
