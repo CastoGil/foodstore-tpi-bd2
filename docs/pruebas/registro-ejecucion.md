@@ -15,7 +15,7 @@ Este registro complementa el [plan de 41 pruebas](plan-de-pruebas.md). La inform
 | **APP-02** | Ricardo confirmó que una opción inválida muestra mensaje y conserva el menú | **Aprobado (informado por ejecutor)** | [Opción inválida](../capturas/aplicacion/APP-02-opcion-invalida.png) |
 | **APP-03** | Ricardo confirmó que la ausencia de URI produce error controlado y permite continuar | **Aprobado (informado por ejecutor)** | [Sin URI](../capturas/aplicacion/APP-03-sin-uri.png) |
 | **BAK-01** | `backup.ps1` mostró `Falta configurar MONGODB_URI en el archivo .env.` y `$LASTEXITCODE` devolvió `1` | **Aprobado (resultado observado)** | [Error de respaldo](../capturas/backup/BAK-01-error-backup.png) |
-| **SEG-01** | Se verificó árbol de `main`, ocho commits publicados y configuración de exclusiones. No aparece un archivo `.env` ni un respaldo privado en esos archivos versionados. `.env.example` contiene URI vacía | **Parcial; faltan revisión visual de imágenes y verificación del ZIP final** | Revisión textual del repositorio; no existe todavía una captura específica |
+| **SEG-01** | Se verificó el árbol de `main`, historial de commits y configuración de exclusiones. No aparece `.env` ni un respaldo privado en los archivos versionados; `.env.example` contiene URI vacía. Ricardo confirmó haber revisado visualmente las ocho capturas publicadas sin advertir datos sensibles | **Parcial: falta revisar ZIP final y futuras evidencias de Atlas** | Revisión del repositorio y confirmación de revisión visual por Ricardo (18/10/2026) |
 
 **Fecha de ejecución:** 18/10/2026 para los ensayos observados o informados en la conversación. La hora exacta de cada caso no se consignó en una planilla; no se inventa. La mera existencia del archivo PNG no demuestra su contenido: revisar visualmente las capturas antes de presentar la evidencia final.
 
@@ -43,9 +43,9 @@ Se comprobaron los siguientes hechos:
 - En el árbol versionado no hay archivo `.env` ni carpeta `resguardos_tpi/`.
 - El archivo `.gitignore` excluye `node_modules/`, `.env`, `resguardos_tpi/` y `*.log`.
 - El archivo `.env.example` solamente contiene una URI vacía y el nombre de la base.
-- La lista de archivos de los ocho commits existentes hasta la comprobación no contiene un `.env` ni respaldos privados.
+- La revisión de la lista de archivos en commits del proyecto no detectó un `.env` ni respaldos privados.
 
-Estas comprobaciones no constituyen una auditoría completa del contenido de las imágenes, datos sensibles que pudieran figurar en texto o futuros archivos de entrega. Antes de cerrar SEG-01, abrir y revisar **visualmente las siete capturas** y controlar el ZIP que se va a entregar. No publicar URI reales, contraseñas o datos privados.
+Ricardo informó el 18/10/2026 que revisó visualmente las **ocho capturas** ya publicadas, siguiendo la consigna de comprobar que no mostraran credenciales, URI de Atlas ni información privada. Esta comprobación visual es **declarada por el ejecutor** y no sustituye un análisis automatizado del contenido binario. Para cerrar SEG-01 falta revisar el **ZIP final** y toda nueva evidencia que se agregue, especialmente las capturas de Atlas. No publicar URI reales, contraseñas o datos privados.
 
 ## 4. Pruebas pendientes que requieren Atlas
 
@@ -68,7 +68,7 @@ No se considerarán aprobadas hasta registrar resultados reales y evidencias en 
 ## 6. Próximos pasos
 
 1. APP-01 completada: conservar la evidencia de salida en la entrega final.
-2. Comprobar visualmente los siete archivos PNG y cerrar SEG-01 cuando corresponda.
+2. Revisión visual de las ocho capturas actuales: confirmada por Ricardo; controlar imágenes nuevas de Atlas y el ZIP final antes de cerrar SEG-01.
 3. Esperar la configuración de Atlas de Maca y ejecutar las pruebas de integración.
 4. Completar las capturas de las colecciones, los tipos BSON y el respaldo real.
 5. Unificar los resultados comprobados en el informe final en PDF.
