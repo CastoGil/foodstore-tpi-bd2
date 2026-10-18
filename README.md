@@ -163,7 +163,7 @@ Se incorporaron al repositorio los siguientes documentos:
 - [Registro de ejecución y evidencias](docs/pruebas/registro-ejecucion.md): estado real de pruebas locales, capturas faltantes y próximos pasos.
 - [Borrador unificado del informe final](docs/informe/borrador-informe-final.md): base redactada para integrar el modelo de Maca y las pruebas contra Atlas.
 
-**Evidencias locales incorporadas (18/10/2026):** seis capturas de navegación/validaciones en `docs/capturas/aplicacion/` y una de BAK-01 en `docs/capturas/backup/`. Las capturas reales de Atlas siguen pendientes. Ver [registro de ejecución](docs/pruebas/registro-ejecucion.md) para el estado por caso.
+**Evidencias locales incorporadas (18/10/2026):** siete capturas de navegación/validaciones, incluida la salida APP-01, en `docs/capturas/aplicacion/`, y una de BAK-01 en `docs/capturas/backup/`. Las capturas reales de Atlas siguen pendientes. Ver [registro de ejecución](docs/pruebas/registro-ejecucion.md) para el estado por caso.
 
 ## 9. Responsabilidades del equipo
 
@@ -179,12 +179,12 @@ Se incorporaron al repositorio los siguientes documentos:
 
 - Disponibilidad de Node.js, npm y dependencias.
 - Revisión de sintaxis de los seis archivos JavaScript.
-- Navegación de los tres menús y manejo de opciones inválidas. El cierre del programa figuraba como verificado localmente, pero falta adjuntar una captura de la salida definitiva para cerrar APP-01.
+- Navegación de los tres menús y manejo de opciones inválidas; cierre correcto del programa confirmado con captura. APP-01 aprobada.
 - Manejo de `MONGODB_URI` vacía sin cierre abrupto de la aplicación.
 - **26 comprobaciones de lógica con datos simulados**, según el registro previo del proyecto.
 - Disponibilidad de `mongodump` y `mongorestore` (versión reportada: `100.19.1`).
 - Ejecución de `backup.ps1` sin URI: mensaje explicativo y código de salida `1`; evidencia BAK-01 publicada.
-- Guía técnica, plan de 41 pruebas y registro de ejecución publicados. Capturas locales APP-01 (parcial), APP-02, APP-03 y BAK-01 incorporadas al repositorio.
+- Guía técnica, plan de 41 pruebas y registro de ejecución publicados. Capturas locales APP-01 (aprobada), APP-02, APP-03 y BAK-01 incorporadas al repositorio.
 
 Estas comprobaciones locales **no equivalen** a una validación de persistencia real.
 
