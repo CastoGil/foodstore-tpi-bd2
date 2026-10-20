@@ -13,7 +13,49 @@ Food Store es una aplicación académica de gestión de pedidos desarrollada en 
 
 Se optó por una aplicación de consola para concentrar el trabajo en el modelado de datos, la persistencia y su verificación. El alcance no incluye pagos, facturación, envíos ni actualización automática del stock.
 
-**Pendiente de Maca:** incorporar una descripción concreta del negocio, el problema que resuelve y sus usuarios, coherente con las funcionalidades implementadas.
+## 1. Descripción del Negocio 
+
+##Contexto y propósito del Sistema 
+
+El proyecto Food Store surge como una solución orientada a la gestión operativa integral de un comercio gastronómico de comidas rápidas y cafetería. La plataforma centraliza el registro, control y seguimiento de las tres entidades fundamentales del negocio: el padrón de clientes, el catálogo de productos ofrecidos y las órdenes de compra (pedidos) emitidas.  
+
+El propósito principal del sistema radica en optimizar los flujos de atención y consulta en el punto de venta, permitiendo un manejo consistente de datos transaccionales sin depender de esquemas rígidos tradicionales, aprovechando la flexibilidad y escalabilidad que provee MongoDB Atlas como motor de base de datos no relacional alojado en la nube.  
+
+##Entidades Principales 
+
+El modelo de datos opera a partir de tres colecciones canónicas:  
+
+Clientes: Almacena la información de contacto e identificación de los compradores recurrentes o eventuales. Garantiza la unicidad mediante una restricción de índice único sobre la dirección de correo electrónico.  
+
+Productos: Define el catálogo comercial clasificado por categorías (comidas, bebidas, postres), resguardando los valores nominales vigentes mediante tipos de datos decimales de alta precisión financiera (Decimal128).  
+
+Pedidos: Registra las transacciones comerciales que asocian a un cliente emisor con una o más líneas de productos solicitados. Para mantener la fidelidad histórica, cada orden preserva los datos de los ítems en el instante exacto de la compra mediante estructuras embebidas.  
+
+##2. Alcance del Proyecto 
+
+Funcionalidades Incluidas 
+
+Gestión de Clientes: Alta de nuevos perfiles, consulta de clientes activos, búsqueda por identificador canónico (ObjectId), modificación de datos de contacto y baja lógica a través de la bandera booleana activo.  
+
+Control de Catálogo de Productos: Registro, actualización de precios y categorización de productos, con soporte para deshabilitación lógica en lugar de borrado físico.  
+
+Emisión y Consulta de Pedidos: Generación de órdenes de compra compuestas, cálculo de subtotales por ítem y total acumulado, seguimiento por estados operativos (pendiente, en preparación, entregado, cancelado) y vinculación directa con el cliente solicitante.  
+
+Seguridad y Disponibilidad: Almacenamiento seguro en un clúster MongoDB Atlas M0 (AWS sa-east-1) con autenticación SCRAM, restricción de acceso por red y políticas de respaldo manual/programado mediante herramientas nativas (mongodump / mongorestore).  
+
+ 
+
+##Límites del Sistema y Exclusiones (Fuera de Alcance) 
+
+Para delimitar formalmente la complejidad operativa del trabajo práctico, se establecen explícitamente las siguientes exclusiones:  
+
+Sin Pasarela de Pagos Online: El sistema no integra APIs de cobranza externa (como Mercado Pago, Stripe o redes bancarias); las operaciones se consideran abonadas o pendientes de cobro bajo mecanismos manuales en mostrador.  
+
+Sin Facturación Electrónica: No se contempla la emisión de comprobantes fiscales legales ni la comunicación directa con organismos recaudadores (AFIP/ARCA).  
+
+Sin Control Automático de Inventario (Stock): La plataforma no efectúa descuentos de existencias físicas de materias primas ni valida cupos mínimos de depósito al momento de confirmar un pedido.  
+
+Sin Autenticación de Usuarios Finales (Clientes): La aplicación está concebida como una consola de administración interna para el personal del local; los clientes no cuentan con portal de autoservicio ni credenciales de acceso. 
 
 ## 2. Objetivos
 
@@ -51,9 +93,13 @@ Archivos principales:
 - `src/operaciones/productos.js`: CRUD, categorías y precios.
 - `src/operaciones/pedidos.js`: pedidos, validaciones, cálculos y estados.
 - `scripts/backup.ps1`: respaldo con `mongodump`.
-
-**Evidencia pendiente:** captura de estructura de carpetas y capturas de la aplicación ejecutándose.
-
+![Visión General del Clúster](../capturas/atlas/cluster_overview.png)
+![Configuración de Red](../capturas/atlas/network_access.png)
+![Usuario Database Access](../capturas/atlas/database_access.png)
+![Índice Único Email](../capturas/atlas/indice_email_unique.png)
+![Datos Clientes](../capturas/atlas/datos_clientes.png)
+![Datos Productos](../capturas/atlas/datos_productos.png)
+![Datos Pedidos](../capturas/atlas/datos_pedidos.png)
 ## 4. Modelo documental
 
 **Base prevista:** `foodstore_tpi`.  
