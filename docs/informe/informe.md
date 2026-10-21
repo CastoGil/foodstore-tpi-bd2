@@ -1,11 +1,10 @@
-# Food Store — Informe técnico del Trabajo Práctico Integrador
+# Food Store — Informe Técnico Final del TPI
 
 **Asignatura:** Bases de Datos II.
 **Proyecto:** Food Store
 **Integrantes:** Ricardo Casto y Macarena Larrosa
 **Fecha de actualización:** 21/10/2026
-**Estado:** Integración y pruebas principales realizadas. Documento preparado para revisión, diagramación y exportación al PDF final.
----
+**Estado:** Documento final consolidado para evaluación y defensa oral.
 
 ## 1. Introducción
 
@@ -83,7 +82,7 @@ En términos de operaciones MongoDB: **CREATE** se implementa con `insertOne`, *
 
 ## 5. Infraestructura y configuración de MongoDB Atlas
 
-La infraestructura empleada corresponde al clúster de MongoDB Atlas M0 documentado mediante capturas. La base de trabajo se denomina `foodstore_tpi` y contiene las colecciones `clientes`, `productos` y `pedidos`.
+La infraestructura empleada corresponde al clúster alojado en el proveedor AWS en la región São Paulo (sa-east-1) y con motor MongoDB 8.0 (MongoDB Atlas M0) documentado mediante capturas. La base de trabajo se denomina `foodstore_tpi` y contiene las colecciones `clientes`, `productos` y `pedidos`.
 
 ![Vista general del clúster en Atlas](../capturas/atlas/cluster_overview.png)
 
@@ -107,9 +106,9 @@ La cadena de conexión se configura en el archivo local `.env`, que **no forma p
 
 La existencia de documentos en Atlas se documentó con las siguientes capturas:
 
-- [Colección clientes](../capturas/atlas/datos_clientes.png).
-- [Colección productos](../capturas/atlas/datos_productos.png).
-- [Colección pedidos](../capturas/atlas/datos_pedidos.png).
+![Colección clientes](../capturas/atlas/datos_clientes.png).
+![Colección productos](../capturas/atlas/datos_productos.png).
+![Colección pedidos](../capturas/atlas/datos_pedidos.png).
 
 En `clientes` se definió el índice único `email_1`, que impide duplicar el campo `email`, incluidos los registros con `activo: false`. El índice fue comprobado también después de la restauración.
 
@@ -157,8 +156,7 @@ Estas estructuras describen el modelo de la aplicación; **no se afirma haber co
 ```
 
 ### 6.4. Ejemplo de pedido en Extended JSON
-
-```json
+``json
 {
   "_id": { "$oid": "6713dc03a1b2c3d4e5f60020" },
   "clienteId": { "$oid": "6713dc01a1b2c3d4e5f60001" },
@@ -170,13 +168,19 @@ Estas estructuras describen el modelo de la aplicación; **no se afirma haber co
       "precioUnitario": { "$numberDecimal": "10500.00" },
       "cantidad": { "$numberInt": "2" },
       "subtotal": { "$numberDecimal": "21000.00" }
+    },
+    {
+      "productoId": { "$oid": "6713dc02a1b2c3d4e5f60012" },
+      "nombreProducto": "Gaseosa Coca cola 500ml",
+      "precioUnitario": { "$numberDecimal": "2500.00" },
+      "cantidad": { "$numberInt": "1" },
+      "subtotal": { "$numberDecimal": "2500.00" }
     }
   ],
-  "total": { "$numberDecimal": "21000.00" },
+  "total": { "$numberDecimal": "23500.00" },
   "estado": "pendiente",
   "activo": true
 }
-```
 
 Los tres fragmentos corresponden a **ejemplos ilustrativos**, no a un volcado de la base actual. También están disponibles como archivos de texto: [clientes.json](../datos-ejemplo/clientes.json), [productos.json](../datos-ejemplo/productos.json) y [pedidos.json](../datos-ejemplo/pedidos.json).
 
