@@ -1,161 +1,166 @@
 # Food Store — Plan de pruebas funcionales y de integración
 
-**Trabajo Práctico Integrador — Bases de Datos II**  
-**Integrantes:** Ricardo y Maca  
-**Fecha de preparación:** 18/10/2026  
-**Repositorio:** `CastoGil/foodstore-tpi-bd2`  
-**Base de datos:** `foodstore_tpi`  
-**Estado general:** plan organizado; la integración real permanece pendiente de MongoDB Atlas.
+**Trabajo Práctico Integrador — Bases de Datos II**
 
-## 1. Objetivo
+**Integrantes:** Ricardo Casto y Macarena Larrosa.
 
-Comprobar que la aplicación por consola desarrollada en Node.js ejecute las operaciones previstas sobre MongoDB Atlas, respete las validaciones del modelo, conserve el historial mediante baja lógica y genere un respaldo verificable. Las pruebas que todavía no fueron ejecutadas no se registran como aprobadas.
+**Base principal:** `foodstore_tpi`.
 
-### Estados de las pruebas
+**Base de recuperación de prueba:** `foodstore_tpi_restore_test`.
 
-- **Pendiente:** todavía no fue ejecutada.
-- **Aprobado:** se observó el resultado esperado y se registró evidencia.
-- **Falló:** el comportamiento fue diferente al esperado.
-- **Bloqueado:** no puede ejecutarse hasta cumplir un requisito previo, por ejemplo, configurar Atlas.
-- **Verificación local informada:** el README registra un ensayo anterior, pero falta adjuntar evidencia a este plan.
+**Actualizado:** 21/10/2026.
 
-## 2. Orden recomendado de trabajo
+## 1. Objetivo y alcance
 
-1. **Antes de Atlas:** recopilar capturas de los menús, opciones inválidas y errores de configuración; revisar `.gitignore`, `.env.example` y la ausencia de credenciales publicadas.
-2. **Con Atlas listo:** verificar URI, credenciales, acceso de red, `ping` y permisos.
-3. **Clientes:** alta, consultas, modificación, índice único de correo y baja lógica.
-4. **Productos:** alta, consultas, modificación, categorías, importes `Decimal128` y baja lógica.
-5. **Pedidos:** referencias, cálculos, estados, validaciones e historial.
-6. **Respaldo:** generar `mongodump`, revisar archivos, ensayo de recuperación en una base distinta y registro de tiempos.
-7. **Cierre:** completar estados y evidencias, actualizar el README e integrar el informe final.
+Comprobar el funcionamiento de la aplicación de consola Food Store conectada a MongoDB Atlas, incluyendo operaciones de creación, consulta, modificación y baja lógica de clientes, productos y pedidos; validaciones de negocio; conservación del detalle histórico de los pedidos; respaldo de datos con `mongodump`; y recuperación de una copia independiente mediante `mongorestore`.
 
-## 3. Preparación y datos de prueba
+El plan reúne los casos principales del TPI y conserva los identificadores utilizados en las capturas. Procede de un catálogo inicial más amplio de 41 casos; los saltos de numeración no significan necesariamente que existan obligaciones pendientes.
 
-1. Configurar Atlas M0, el usuario con permisos y Network Access. Completar las variables privadas en `.env`, ejecutar `npm ci` y luego `npm start`.
-2. Acordar con Maca los datos ficticios y utilizar una base o un conjunto de documentos destinados a las pruebas. No eliminar físicamente registros para limpiar los datos.
-3. Preparar **cliente A** (activo), **producto P1** (`comidas`, ARS `1250.50`) y **producto P2** (`bebidas`, ARS `750.25`). El pedido de **2 × P1 + 1 × P2** debe dar **ARS 3251.25**.
-4. Conservar los `ObjectId` obtenidos e ingresar correos ficticios exclusivos de cada corrida, por ejemplo `qa.foodstore.20261018.01@example.com`.
-5. Reservar un cliente y un producto adicionales para pruebas de baja; no desactivar los datos principales antes de terminar las pruebas de pedidos.
-6. Corroborar los documentos y tipos BSON en Atlas o MongoDB Compass; no basarse solo en la pantalla de consola.
+Este documento describe qué se pretende comprobar, el resultado esperado y el alcance de la evidencia disponible. Los resultados detallados, las fechas y las limitaciones se registran en el [registro de ejecución](registro-ejecucion.md). No se presenta una prueba como aprobada por el solo hecho de que una función exista en el código.
 
-## 4. Casos de prueba
+## 2. Criterios de evaluación
 
-**Total: 41 casos.** Los casos que requieren Atlas se mantienen como pendientes hasta ejecutarlos. APP-02 y APP-03 cuentan con resultados correctos informados por Ricardo y archivos de evidencia subidos; BAK-01 se observó en la consola y su captura está publicada. APP-01 ya cuenta con navegación y salida final verificadas; SEG-01 requiere completar la auditoría final. Ver [registro de ejecución](registro-ejecucion.md).
+- **Comprobado:** existe evidencia de ejecución que respalda el resultado indicado, dentro de las condiciones ensayadas.
+- **Parcial:** se observó parte del comportamiento, pero falta una comprobación específica o existe una diferencia que necesita aclararse.
+- **No ejecutado:** no se dispone de una ejecución demostrada. No se registra como aprobado.
+- **Revisión del código:** describe la implementación y complementa, pero no reemplaza, una prueba ejecutada contra Atlas.
 
-### A. Aplicación y conexión
+Las pruebas de consulta se realizan sin alterar documentos. Las pruebas de modificación y baja lógica afectan únicamente los documentos de ensayo correspondientes. Los casos no ejecutados se mantienen como posibles pruebas complementarias, sin inventar resultados.
 
-| ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
-|---|---|---|:---:|---|
-| APP-01 | Ejecutar `npm start` y recorrer los menús 1, 2, 3 y volver con 0. | Navegación correcta y salida ordenada. | No | **Aprobado:** navegación y cierre del programa verificados; evidencia `APP-01-salida-programa.png` publicada junto con las capturas de los menús |
-| APP-02 | Ingresar una opción inválida. | Mensaje explicativo y continuidad del menú. | No | **Aprobado (informado por Ricardo):** evidencia `APP-02-opcion-invalida.png` publicada |
-| APP-03 | Ejecutar una operación con `MONGODB_URI` vacía. | Informa falta de URI sin mostrar credenciales ni cerrar abruptamente el menú. | No | **Aprobado (informado por Ricardo):** evidencia `APP-03-sin-uri.png` publicada |
-| ATL-01 | Configurar URI válida y ejecutar una consulta. | Se conecta, completa `ping` y consulta la base `foodstore_tpi`. | Sí | Pendiente |
-| ATL-02 | Verificar el usuario de Atlas y sus permisos de trabajo. | Inserción y consulta permitidas en la base asignada. | Sí | Pendiente |
+## 3. Entorno y preparación
 
-### B. Clientes
+- Aplicación Node.js iniciada con `npm start`, con módulos para clientes, productos y pedidos.
+- Base `foodstore_tpi` en MongoDB Atlas y conexión mediante `MONGODB_URI` y `MONGODB_DB`, definidas en el archivo privado `.env`.
+- Datos de ejemplo de clientes, productos y pedidos; identificadores de MongoDB preservados.
+- Herramientas MongoDB Database Tools (`mongodump` y `mongorestore`) y consola `mongosh`.
+- Capturas guardadas en `docs/capturas/aplicacion/`, `docs/capturas/atlas/` y `docs/capturas/backup/`.
+- Base independiente `foodstore_tpi_restore_test` para comprobar la recuperación sin sobrescribir la base principal.
 
-| ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
-|---|---|---|:---:|---|
-| CLI-01 | Crear cliente con nombre, email y teléfono válidos. | Se obtiene ObjectId; documento persistido con `activo: true`. | Sí | Pendiente |
-| CLI-02 | Listar y buscar por ID un cliente activo. | Aparece el cliente correcto en consola. | Sí | Pendiente |
-| CLI-03 | Modificar nombre o teléfono, dejando en blanco campos a conservar. | Solo se actualizan los campos ingresados. | Sí | Pendiente |
-| CLI-04 | Crear un cliente con nombre vacío o correo mal formado. | Se rechaza sin crear el documento. | Sí | Pendiente |
-| CLI-05 | Reutilizar un correo ya registrado, también cambiando mayúsculas. | Se rechaza por índice único `email`; correo normalizado a minúsculas. | Sí | Pendiente |
-| CLI-06 | Buscar o modificar con ID no hexadecimal de 24 caracteres. | Se indica formato de ID inválido; no se opera sobre la base. | Sí | Pendiente |
-| CLI-07 | Solicitar la baja y responder `n`. | Cancelación sin cambiar `activo`. | Sí | Pendiente |
-| CLI-08 | Desactivar un cliente con confirmación `s`. | `activo: false`; deja de verse en consultas habituales, pero permanece en Atlas. | Sí | Pendiente |
-| CLI-09 | Intentar reutilizar el email de un cliente ya inactivo. | Se rechaza por unicidad; el índice aplica también a documentos desactivados. | Sí | Pendiente |
+Para comprobar el cálculo de pedidos se utilizó un caso con dos unidades a ARS 1.250,50 y una unidad a ARS 750,25: subtotal ARS 2.501,00 más ARS 750,25, total esperado ARS 3.251,25.
 
-**Control previo a CLI-05:** verificar que exista el índice `createIndex({ email: 1 }, { unique: true })`. Si los datos iniciales contienen correos duplicados, coordinar la resolución con Maca antes de crear el índice.
+Las bajas se realizan lógicamente mediante el campo `activo`. No se requiere eliminar físicamente documentos como parte de las pruebas.
 
-### C. Productos
+## 4. Casos funcionales y de integración
 
-| ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
-|---|---|---|:---:|---|
-| PRO-01 | Crear P1 y P2 con categorías válidas y precios decimales. | Documentos activos; precios persistidos como BSON `Decimal128`. | Sí | Pendiente |
-| PRO-02 | Listar y buscar por ID productos activos. | Coinciden registros, categoría e importe. | Sí | Pendiente |
-| PRO-03 | Modificar nombre, categoría o precio. | Se actualizan solo los campos indicados. | Sí | Pendiente |
-| PRO-04 | Crear producto con categoría distinta de `comidas`, `bebidas` y `postres`. | Rechazo con explicación. | Sí | Pendiente |
-| PRO-05 | Intentar precio 0, negativo o con más de dos decimales. | Rechazo sin persistencia. | Sí | Pendiente |
-| PRO-06 | Crear precio con coma decimal, p. ej. `1500,50`. | Se acepta y persiste como `1500.50` Decimal128. | Sí | Pendiente |
-| PRO-07 | Cancelar la baja de un producto y luego confirmarla. | Con `n` sigue activo; con `s` queda `activo:false`, sin eliminación física. | Sí | Pendiente |
+| Área / casos | Resultado esperado | Estado y alcance de la evidencia |
+| --- | --- | --- |
+| Aplicación — APP-01 a APP-03 | Iniciar, navegar entre menús, salir y manejar una opción inválida o falta de URI | **Comprobado** para las situaciones mostradas en las capturas. |
+| Conexión — ATL-01 y ATL-02 | Conectar a Atlas y ejecutar operaciones permitidas con el usuario configurado | **Comprobado** para conexión, consultas y operaciones CRUD ensayadas. No acredita privilegios mínimos. |
+| Clientes — CLI-01 a CLI-03 | Crear, buscar por ID y modificar datos de un cliente | **Comprobado** con datos de prueba y consulta posterior. |
+| Correo único — CLI-05 y CLI-09 | Rechazar correos duplicados, incluso asociados a clientes inactivos | **Comprobado** para los correos utilizados; no se ensayaron todas las variaciones posibles. |
+| Baja de cliente — CLI-08 | Cambiar `activo` a `false` y excluirlo de listados y búsquedas de activos | **Comprobado** mediante baja, listado y búsqueda posterior. |
+| Productos — PRO-01 a PRO-03 | Crear, buscar y modificar productos | **Comprobado** para los registros utilizados. |
+| Validaciones — PRO-04 a PRO-06 | Rechazar categoría inválida y precios inválidos; admitir coma decimal | **Comprobado** para categoría `limpieza`, precios cero, negativos, con tres decimales y entrada `1500,50`. |
+| Baja de producto — PRO-07 | Permitir cancelar o confirmar la baja; excluir el producto desactivado de consultas de activos | **Comprobado** con cancelación, confirmación y búsqueda posterior. |
+| Pedidos — PED-01 y PED-02 | Crear y consultar pedidos con subtotales y total calculados correctamente | **Comprobado**, incluido el pedido de ARS 3.251,25. |
+| Historial — PED-08 y PED-09 | Mantener en el pedido el nombre y precio históricos tras modificar o desactivar un producto | **Comprobado** para cambios y baja de producto; no se extiende a baja de cliente vinculado. |
+| Estados — PED-10 a PED-12 | Cambiar de `pendiente` a `entregado` o `cancelado` y rechazar transiciones no admitidas | **Comprobado** para las transiciones y el bloqueo observados. |
+| Baja de pedido — PED-13 | Desactivar el pedido, conservarlo en Atlas y omitirlo de consultas de activos | **Comprobado:** el pedido permanece en la base principal con `activo: false` y no figura entre los cuatro pedidos activos listados desde la aplicación. |
+| Integridad de importes — INT-01 | Para cada ítem: precio unitario × cantidad = subtotal; suma de subtotales = total del pedido | **Comprobado** en la base principal el 21/10/2026: cinco pedidos revisados, cinco correctos y cero inconsistencias después de corregir un dato de ejemplo. |
 
-### D. Pedidos, validaciones e historial
+El código utiliza `updateOne` con `$set` para bajas lógicas y filtra las consultas habituales por `activo: true`. La verificación de esas instrucciones es una observación de implementación; los resultados de ejecución están delimitados en la tabla.
 
-| ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
-|---|---|---|:---:|---|
-| PED-01 | Crear pedido con cliente activo y un producto activo. | Documento insertado, estado `pendiente`, `activo:true` y `items` embebido. | Sí | Pendiente |
-| PED-02 | Crear pedido de 2 P1 a 1250.50 y 1 P2 a 750.25. | Subtotales `2501.00` y `750.25`; total `3251.25`, importes `Decimal128`, cantidades `Int32`. | Sí | Pendiente |
-| PED-03 | Intentar incluir dos veces el mismo producto en un pedido. | Se impide el duplicado y se solicita otro producto. | Sí | Pendiente |
-| PED-04 | Ingresar cantidad 0, negativa, decimal o mayor que 2147483647. | Se rechaza la cantidad inválida. | Sí | Pendiente |
-| PED-05 | Intentar crear pedido con cliente inexistente o inactivo. | No se inserta el pedido. | Sí | Pendiente |
-| PED-06 | Intentar crear pedido con producto inexistente o inactivo. | No se inserta el pedido. | Sí | Pendiente |
-| PED-07 | Responder `n` a la confirmación final del pedido. | No se inserta el pedido. | Sí | Pendiente |
-| PED-08 | Modificar nombre y precio de un producto después de crear un pedido. | El `nombreProducto` y `precioUnitario` del pedido anterior permanecen iguales. | Sí | Pendiente |
-| PED-09 | Desactivar cliente o producto vinculado a un pedido anterior. | El pedido preexistente se conserva; la referencia histórica sigue disponible. | Sí | Pendiente |
-| PED-10 | Cambiar un pedido pendiente a `entregado`. | Actualiza solo el estado; mantiene `items` y total. | Sí | Pendiente |
-| PED-11 | Cambiar otro pedido pendiente a `cancelado`. | Transición correcta sin borrar su detalle. | Sí | Pendiente |
-| PED-12 | Intentar cambiar estado de un pedido `entregado` o `cancelado`. | Se bloquea la nueva transición. | Sí | Pendiente |
-| PED-13 | Desactivar un pedido con confirmación. | Queda `activo:false`, no aparece en consultas habituales y continúa en Atlas con su detalle. | Sí | Pendiente |
+### 4.1. Observación específica sobre PED-13
 
-### E. Respaldo, recuperación y seguridad
+Una consulta de solo lectura del 21/10/2026 verificó el pedido `6ad8177af44effa3cac4d7f5` en ambas bases: en `foodstore_tpi` tiene `activo: false`, mientras que en `foodstore_tpi_restore_test` conserva `activo: true`. En las dos figura `estado: cancelado`. **La baja está persistida en la base principal**; la diferencia con la base restaurada es compatible con que el respaldo corresponda a un estado anterior. La consulta no permite establecer por sí sola el momento exacto de la baja.
 
-| ID | Procedimiento | Resultado esperado | Atlas | Estado / evidencia |
-|---|---|---|:---:|---|
-| BAK-01 | Ejecutar `backup.ps1` sin `MONGODB_URI`. | Error explicativo y código de salida `1`. | No | **Aprobado:** mensaje esperado y código `1` observados; `BAK-01-error-backup.png` publicado |
-| BAK-02 | Ejecutar `backup.ps1` con Atlas conectado. | Código `0`, carpeta `resguardos_tpi/AAAA-MM-DD/`, archivos `.bson` y `resultado_backup.txt`. | Sí | Pendiente |
-| BAK-03 | Verificar contenidos del respaldo. | Archivos de las tres colecciones, sus metadatos y documentos activos e inactivos. | Sí | Pendiente |
-| BAK-04 | Ejecutar una segunda vez el mismo día. | Advierte que la carpeta de la fecha ya existe y no sobrescribe el respaldo anterior. | Sí | Pendiente |
-| BAK-05 | Restaurar una copia sobre una base **diferente** de ensayo. | `mongorestore` recupera datos; colecciones, cantidades, estado y pedidos históricos coinciden. | Sí | Pendiente |
-| BAK-06 | Cronometrar respaldo y, si se ensaya recuperación, restauración y vuelta a consultas. | Se registran duraciones reales; no se presenta el RTO objetivo como medido. | Sí | Pendiente |
-| SEG-01 | Revisar repositorio, `.gitignore`, `.env.example` y capturas. | No hay URI completa, contraseña ni archivo `.env` publicado. | No | **Parcial:** repositorio y archivos de configuración comprobados; Ricardo confirmó revisión visual de las 8 capturas actuales. Falta revisión del ZIP final y de futuras capturas de Atlas |
+El campo comercial `estado` es independiente de `activo`. Una prueba posterior con `npm start`, opción **Gestionar pedidos → Listar pedidos activos**, mostró cuatro pedidos y excluyó el ID `6ad8177af44effa3cac4d7f5`. Así se verificó la baja lógica de extremo a extremo para este caso.
 
+### 4.2. Corrección de datos e integridad aritmética
 
-### Seguimiento de evidencia local (18/10/2026)
+Se encontró un dato de ejemplo inconsistente en el pedido terminado en `f60021`: Pizza Muzzarella tenía precio unitario ARS 1.200,00, cantidad 1 y subtotal ARS 12.000,00. El catálogo consultado mostraba ARS 12.000,00.
 
-- **APP-01:** **Aprobado**; captura de salida final `APP-01-salida-programa.png` publicada, además de las capturas de navegación.
-- **APP-02:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-02-opcion-invalida.png`.
-- **APP-03:** prueba correcta reportada y captura publicada en `docs/capturas/aplicacion/APP-03-sin-uri.png`.
-- **BAK-01:** salida observada `Falta configurar MONGODB_URI en el archivo .env.` y código `1`; captura publicada en `docs/capturas/backup/BAK-01-error-backup.png`.
-- **SEG-01:** revisión del árbol, historial y archivos de texto realizada; Ricardo confirmó revisión visual de las ocho imágenes publicadas el 18/10/2026. Falta revisar el ZIP final y las futuras capturas de Atlas.
+Se actualizó únicamente el precio unitario del ítem a ARS 12.000,00, primero en la base de recuperación y luego en la base principal. El subtotal del ítem y el total del pedido (ARS 27.000,00) se conservaron.
 
-No se afirma que se hayan ejecutado pruebas con una conexión real a MongoDB Atlas.
+Posteriormente, una consulta de solo lectura analizó los cinco pedidos de `foodstore_tpi` usando cálculos exactos en centavos. Resultado: **cinco pedidos correctos y cero inconsistencias aritméticas**. Esta validación no equivale a comprobar todas las reglas de negocio ni todas las condiciones concurrentes.
 
-## 5. Verificación complementaria en MongoDB Atlas
+## 5. Respaldo y recuperación
 
-Consultar directamente los documentos desactivados con este filtro en Atlas o Compass:
+| Caso | Resultado esperado | Estado y evidencia |
+| --- | --- | --- |
+| BAK-01 | Informar error controlado ante la falta de `MONGODB_URI` | **Comprobado**: mensaje de error y código de salida 1. |
+| BAK-02 | Ejecutar `mongodump` sobre Atlas y finalizar sin errores | **Comprobado**: respaldo inicial, código 0, tres BSON y 18 documentos. |
+| BAK-03 | Generar BSON y metadatos de clientes, productos y pedidos | **Comprobado**: archivos encontrados en el respaldo. |
+| BAK-06 | Registrar la duración del respaldo | **Comprobado**: 8,21 segundos en la primera ejecución. |
+| BAK-07 | Crear respaldos separados por fecha y hora, sin sustituir el anterior | **Comprobado**: ejecución del 21/10/2026 a las 00:50:20, 1,93 segundos y código 0. |
+| BAK-08 | Respaldar nuevamente la base después de la corrección del pedido | **Comprobado**: ejecución del 21/10/2026 a las 01:22:18, 2,02 segundos y código 0. |
+| BKP-02 | Restaurar en una base independiente sin sobrescribir la original | **Comprobado**: 18 documentos, 0 fallidos, código 0; `mongorestore` duró 2,43 segundos. |
+| BKP-03 | Verificar colecciones, cantidades e índice único | **Comprobado**: 5 clientes, 8 productos, 5 pedidos y `email_1` único. |
+| BKP-04 a BKP-06 | Consultar clientes, productos y pedidos desde la aplicación conectada a la base restaurada | **Comprobado**: 4 clientes activos, 6 productos activos y 5 pedidos activos. |
 
-```javascript
-{ activo: false }
-```
+### 5.1. Resultados de los respaldos
 
-Comprobar que `clientes.email` tenga índice único; que `clienteId` e `items.productoId` sean `ObjectId`; que `fecha` sea `Date`; que `items.cantidad` sea `Int32`; y que `precioUnitario`, `subtotal` y `total` sean `Decimal128`. No borrar físicamente documentos para crear evidencias.
+| Fecha y destino relativo | Duración | Resultado |
+| --- | ---: | --- |
+| 20/10/2026 — `resguardos_tpi/2026-10-20/` | 8,21 s | 18 documentos; 3 archivos BSON; código 0; tamaño de archivos de datos: 3.904 bytes (3,81 KB). |
+| 21/10/2026 — `resguardos_tpi/2026-10-21/00-50-20/` | 1,93 s | 18 documentos; 3 archivos BSON; código 0. |
+| 21/10/2026 — `resguardos_tpi/2026-10-21/01-22-18/` | 2,02 s | 18 documentos; 3 archivos BSON; código 0; posterior a la corrección del pedido. |
 
-## 6. Planilla de ejecución y evidencias
+La versión mejorada de `scripts/backup.ps1` organiza las nuevas copias en `resguardos_tpi/AAAA-MM-DD/HH-mm-ss/`. El respaldo del 20/10 conserva su organización anterior. El script respalda la base sin filtrar por `activo`, por lo que incluye registros activos e inactivos.
 
-Completar **una fila por cada prueba realizada**, con datos y resultados observables:
+### 5.2. Restauración y consultas de comprobación
 
-| ID | Fecha y hora | Responsable | Datos de entrada | Resultado observado | Estado | Captura / incidencia |
-|---|---|---|---|---|---|---|
-| CLI-01 | Por completar | Por completar | Por completar | Por completar | Pendiente | Por completar |
-| PED-02 | Por completar | Por completar | Por completar | Por completar | Pendiente | Por completar |
-| BAK-02 | Por completar | Por completar | Por completar | Por completar | Pendiente | Por completar |
+La restauración real del 21/10/2026 utilizó la copia del 20/10/2026. Antes de ejecutarla se verificó con `mongorestore --dryRun` que los nombres de las tres colecciones se traducirían al namespace `foodstore_tpi_restore_test`.
 
-**Ubicación de las capturas:** `docs/capturas/aplicacion/`, `docs/capturas/atlas/` y `docs/capturas/backup/`. Nombrar cada captura con el ID del caso (ejemplo: `CLI-01-alta-cliente.png`) y ocultar cualquier contraseña o URI privada.
+Se recuperaron **18 documentos, sin fallos**, y se procesaron los metadatos del índice `email_1` de clientes. Con `mongosh` se comprobaron las cantidades y la unicidad del índice. A continuación se ejecutó Food Store apuntando temporalmente a la base recuperada, sin modificar `.env`, y se consultaron los tres módulos con éxito.
 
-## 7. Criterios para aprobar la integración
+Los **2,43 segundos** corresponden exclusivamente a la duración medida del comando `mongorestore`, no al tiempo total de restablecimiento del servicio. La copia más reciente del 21/10/2026, generada tras corregir los datos, **todavía no fue restaurada de forma independiente**.
 
-- [ ] La aplicación Node.js se conecta correctamente con Atlas.
-- [ ] Se verifica el CRUD de clientes, productos y pedidos sobre datos persistidos.
-- [ ] El índice de correo único rechaza duplicados, incluidos los de clientes desactivados.
-- [ ] Las consultas habituales excluyen los documentos inactivos, sin eliminarlos físicamente.
-- [ ] Los pedidos validan referencias, cantidades, cálculos y tipos BSON.
-- [ ] Las modificaciones y bajas de clientes o productos no alteran el historial de pedidos.
-- [ ] El respaldo `mongodump` contiene las tres colecciones, su metadata y documentos activos/inactivos.
-- [ ] Se registran resultados reales y evidencias; si no se ensaya la restauración, el informe lo aclara.
+### 5.3. Objetivos RTO y RPO
 
-## 8. Alcance de RTO y RPO
+- **RPO propuesto: 24 horas.** Es la pérdida máxima de información tolerable, expresada en tiempo. El script se ejecuta manualmente y no existe una tarea periódica supervisada, por lo que el objetivo no está garantizado.
+- **RTO propuesto: 60 minutos.** Es la meta para recuperar el servicio completo. No se midió integralmente el proceso desde la detección del incidente hasta la recuperación del uso de la aplicación; por eso el objetivo sigue pendiente de validación completa.
 
-Según `docs/informe/rto-rpo.md`, **RTO = 60 minutos** y **RPO = 24 horas** son objetivos propuestos, no métricas demostradas. La duración real de restauración debe medirse, y el RPO de 24 horas requeriría respaldos efectivos con periodicidad suficiente. El script actual se ejecuta manualmente.
+El tiempo de generación de una copia y el tiempo de ejecución de `mongorestore` son mediciones útiles, pero ninguno equivale por sí solo al RTO integral. La consigna revisada requiere un script ejecutable y un informe RTO/RPO; no se identificó una obligación expresa de programar respaldos cada 24 horas.
 
-**Nota final:** este documento organiza las pruebas planificadas. Ninguna prueba de integración se declara aprobada antes de su ejecución real y registro de evidencia.
+Para ampliar el fundamento y las limitaciones, consultar el [informe RTO/RPO](../informe/rto-rpo.md).
+
+## 6. Evidencias disponibles
+
+Las capturas están organizadas en [Aplicación](../capturas/aplicacion/), [Atlas](../capturas/atlas/) y [Backup y recuperación](../capturas/backup/).
+
+| Evidencia | Archivo |
+| --- | --- |
+| Menú principal | [APP-01](../capturas/aplicacion/APP-01-menu-principal.png) |
+| Conexión y consulta de clientes en Atlas | [APP-02](../capturas/aplicacion/APP-02-clientes-atlas.png) |
+| Modificación de cliente | [CLI-03](../capturas/aplicacion/CLI-03-cliente-modificado.png) |
+| Baja y búsqueda posterior de cliente | [CLI-08](../capturas/aplicacion/CLI-08-listado-tras-baja-y-busqueda.png) |
+| Correo de cliente inactivo | [CLI-09](../capturas/aplicacion/CLI-09-email-cliente-inactivo.png) |
+| Baja de producto | [PRO-07](../capturas/aplicacion/PRO-07-baja-cancelada-confirmada-busqueda.png) |
+| Pedido y cálculo del total | [PED-02](../capturas/aplicacion/PED-02-pedido-creado-detalle.png) |
+| Conservación del historial | [PED-08](../capturas/aplicacion/PED-08-pedido-conserva-historial.png) |
+| Historial tras baja de producto | [PED-09](../capturas/aplicacion/PED-09-historial-tras-baja-producto.png) |
+| Pedido entregado | [PED-10](../capturas/aplicacion/PED-10-pedido-entregado.png) |
+| Transición bloqueada | [PED-12](../capturas/aplicacion/PED-12-transicion-bloqueada.png) |
+| Baja lógica de pedido (persistencia) | [PED-13](../capturas/aplicacion/PED-13-baja-logica-pedido.png) |
+| Exclusión de pedido desactivado del listado de activos | [PED-13 listado](../capturas/aplicacion/PED-13-listado-tras-baja.png) |
+| Respaldo exitoso | [BAK-02](../capturas/backup/BAK-02-respaldo-exitoso.png) |
+| Archivos del respaldo | [BAK-03](../capturas/backup/BAK-03-archivos-respaldo.png) |
+| Restauración de 18 documentos | [BKP-02](../capturas/backup/BKP-02-restauracion-exitosa.png) |
+| Validación de cantidades e índice | [BKP-03](../capturas/backup/BKP-03-verificacion-datos-restaurados.png) |
+| Consultas de clientes recuperados | [BKP-04](../capturas/backup/BKP-04-validacion-clientes.png) |
+| Consultas de productos recuperados | [BKP-05](../capturas/backup/BKP-05-validacion-productos.png) |
+| Consultas de pedidos recuperados | [BKP-06](../capturas/backup/BKP-06-validacion-pedidos.png) |
+
+Las ejecuciones posteriores del backup y la verificación aritmética de los pedidos constan en salidas de consola y se registran en [Registro de ejecución](registro-ejecucion.md); no se afirma que exista una captura independiente para cada una de esas acciones.
+
+## 7. Ensayos complementarios y límites
+
+No se presenta el catálogo completo original de 41 casos como una batería íntegramente ejecutada. Entre las variantes sin comprobación específica permanecen cantidades fuera de rango, todas las combinaciones de referencias inválidas, concurrencia entre modificaciones de productos y creación de pedidos, y una nueva restauración de la copia posterior a la corrección.
+
+Tampoco se verificó un RTO integral ni el cumplimiento sostenido del RPO, y no se incluye una suite automatizada de pruebas. Estas limitaciones no anulan los casos manuales que sí tienen resultados observados.
+
+La comparación del caso PED-13 confirmó la persistencia de la baja en `foodstore_tpi`, y el listado posterior de cuatro pedidos activos desde la aplicación confirmó la exclusión del pedido desactivado. El valor `activo: true` en la base restaurada es compatible con el estado de la copia anterior; no se modificó ese respaldo histórico.
+
+## 8. Cierre y preparación de la entrega
+
+Las operaciones principales del sistema, el respaldo y la recuperación cuentan con evidencias de ejecución. Se confirmó una corrección de datos de ejemplo y se verificó la integridad aritmética de los cinco pedidos de la base principal.
+
+Antes de la entrega definitiva resta:
+
+1. Unificar README y documentos auxiliares con los resultados y fechas reales.
+2. Completar el informe general, incorporar conclusiones sobre la comunicación cliente-servidor y generar el PDF solicitado.
+3. Preparar un ZIP limpio que conserve el código, los scripts, la documentación y los archivos de dependencias, pero excluya `.env`, `node_modules/`, `.git/` y los respaldos locales con datos.
+4. Comprobar los archivos publicados en GitHub y preparar la explicación oral de ambos integrantes.
+
+El ZIP de trabajo utilizado para la auditoría incluía archivos privados y dependencias instaladas; debe prepararse un paquete separado para la entrega. Las credenciales de acceso para corrección no deben publicarse en el repositorio ni incorporarse al ZIP compartido.

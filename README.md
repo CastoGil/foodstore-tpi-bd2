@@ -1,217 +1,284 @@
 # Food Store — Trabajo Práctico Integrador de Bases de Datos II
 
-**Integrantes:** Ricardo y Maca  
-**Repositorio:** [CastoGil/foodstore-tpi-bd2](https://github.com/CastoGil/foodstore-tpi-bd2)  
-**Base de datos:** `foodstore_tpi`  
-**Estado del proyecto (18/10/2026):** implementación incorporada; integración y pruebas reales con MongoDB Atlas pendientes.
+**Integrantes:** Ricardo Casto y Macarena Larrosa.
 
-## 1. Descripción y objetivo
+**Repositorio:** [CastoGil/foodstore-tpi-bd2](https://github.com/CastoGil/foodstore-tpi-bd2).
 
-Food Store es una aplicación de consola desarrollada con **Node.js** y el driver nativo de **MongoDB** para administrar clientes, productos y pedidos almacenados en MongoDB Atlas.
+**Base de datos:** `foodstore_tpi`.
 
-El objetivo del TPI es aplicar modelado NoSQL, persistencia en la nube, operaciones CRUD desde código, relaciones mediante referencias y documentos embebidos, baja lógica y generación de respaldos mediante un script.
+Food Store es una aplicación de consola desarrollada con Node.js y el driver nativo de MongoDB para gestionar clientes, productos y pedidos de un comercio gastronómico. La información persiste en MongoDB Atlas.
 
-Se mantiene una estructura sencilla, acorde con el alcance del trabajo. **No se implementan** pagos, facturación, envíos, actualización automática de stock, frontend ni video demostrativo.
+El proyecto implementa un modelo NoSQL con tres colecciones relacionadas, operaciones CRUD, baja lógica, conservación del historial de los pedidos y un mecanismo de respaldo mediante un script de PowerShell. El alcance académico no incluye pagos, facturación, envíos ni actualización automática de stock.
 
-## 2. Tecnologías
+## 1. Tecnologías
 
 | Tecnología | Uso |
 | --- | --- |
-| Node.js 24.x y npm | Ejecución y gestión de dependencias |
-| MongoDB (driver nativo) | Acceso a las colecciones |
-| MongoDB Atlas M0 | Alojamiento de la base de datos |
-| `dotenv` | Lectura de configuración desde `.env` |
-| `decimal.js` | Cálculo preciso de importes |
-| PowerShell y `mongodump` | Respaldo bajo demanda |
-| Git y GitHub | Control de versiones y trabajo compartido |
+| Node.js 24.x y npm | Ejecución de la aplicación y gestión de dependencias |
+| Driver oficial `mongodb` | Conexión y operaciones sobre MongoDB Atlas |
+| MongoDB Atlas (clúster M0) | Persistencia de datos en la nube |
+| `dotenv` | Configuración local mediante variables de entorno |
+| `decimal.js` | Cálculos de importes sin aritmética binaria de punto flotante |
+| MongoDB Database Tools (`mongodump`, `mongorestore`) | Respaldo y recuperación |
+| PowerShell | Script CLI de respaldo y comprobaciones |
+| Git y GitHub | Control de versiones y colaboración |
 
-## 3. Funcionalidades y alcance
+## 2. Funcionalidades
 
-- **Clientes:** alta, consulta, modificación y baja lógica.
-- **Productos:** alta, consulta, modificación y baja lógica.
-- **Pedidos:** alta, consulta, cambio de estado y baja lógica.
-- **Respaldo:** exportación de la base mediante `scripts/backup.ps1`.
+| Módulo | Operaciones disponibles |
+| --- | --- |
+| Clientes | Crear, listar activos, buscar activo por ID, modificar y desactivar |
+| Productos | Crear, listar activos, buscar activo por ID, modificar y desactivar |
+| Pedidos | Crear, listar activos, buscar activo por ID y consultar su detalle, cambiar de estado y desactivar |
+| Respaldo | Descargar una copia de la base mediante `scripts/backup.ps1` |
 
-Las operaciones sobre MongoDB ya están programadas, pero **deben validarse con una conexión real a Atlas** antes de considerarlas funcionalmente aprobadas.
+La aplicación valida entradas y reglas de negocio, calcula subtotales y totales, y conserva los datos históricos del detalle de cada pedido.
 
-## 4. Estructura del proyecto
+## 3. Estructura del proyecto
 
-```text
-foodstore-tpi-bd2/
-├── .env.example
-├── .gitignore
-├── README.md
-├── package.json
-├── package-lock.json
-├── src/
-│   ├── app.js
-│   ├── config/
-│   │   └── conexion.js
-│   ├── consola/
-│   │   └── entrada.js
-│   └── operaciones/
-│       ├── clientes.js
-│       ├── productos.js
-│       └── pedidos.js
-├── scripts/
-│   └── backup.ps1
-└── docs/
-    ├── capturas/
-    │   ├── aplicacion/
-    │   ├── atlas/
-    │   └── backup/
-    ├── datos-ejemplo/
-    ├── modelo/
-    ├── informe/
-    │   ├── aplicacion-y-respaldo.md
-    │   ├── guia-integracion-y-evidencias.md
-    │   └── rto-rpo.md
-    └── pruebas/
-        └── plan-de-pruebas.md
-```
+| Ruta | Contenido |
+| --- | --- |
+| `src/app.js` | Inicio, menú principal y cierre |
+| `src/config/conexion.js` | Conexión compartida con MongoDB Atlas |
+| `src/consola/entrada.js` | Entrada de datos por consola |
+| `src/operaciones/clientes.js` | Menú y CRUD de clientes |
+| `src/operaciones/productos.js` | Menú y CRUD de productos |
+| `src/operaciones/pedidos.js` | Menú y CRUD de pedidos |
+| `scripts/backup.ps1` | Script de respaldo con `mongodump` |
+| `docs/modelo/` | Descripción del modelo y decisiones de diseño |
+| `docs/datos-ejemplo/` | Ejemplos Extended JSON de las colecciones |
+| `docs/capturas/` | Evidencias de Atlas, aplicación, respaldo y recuperación |
+| `docs/informe/` | Documentación técnica y objetivos RTO/RPO |
+| `docs/pruebas/` | Plan de pruebas y registro de ejecuciones |
+| `.env.example` | Plantilla de configuración, sin credenciales |
+| `package.json`, `package-lock.json` | Dependencias y comandos de ejecución |
 
-Los módulos de `src/operaciones/` contienen tanto sus menús como las funciones de acceso a datos. No se agregaron capas separadas de controladores, servicios ni repositorios.
+La carpeta local `resguardos_tpi/` se genera al ejecutar los backups y **no debe publicarse en el repositorio ni incorporarse al ZIP de código**.
 
-## 5. Modelo de datos
+## 4. Modelo de datos NoSQL
 
-**Base:** `foodstore_tpi`  
-**Colecciones:** `clientes`, `productos` y `pedidos`.
+La base `foodstore_tpi` contiene tres colecciones relacionadas:
 
 | Colección | Campos principales |
 | --- | --- |
 | `clientes` | `_id`, `nombre`, `email`, `telefono`, `activo` |
 | `productos` | `_id`, `nombre`, `categoria`, `precio`, `activo` |
 | `pedidos` | `_id`, `clienteId`, `fecha`, `items`, `total`, `estado`, `activo` |
-| `pedidos.items[]` | `productoId`, `nombreProducto`, `precioUnitario`, `cantidad`, `subtotal` |
+| Elementos de `pedidos.items` | `productoId`, `nombreProducto`, `precioUnitario`, `cantidad`, `subtotal` |
 
-**Tipos BSON acordados:** `ObjectId` para identificadores y referencias; `Date` para fechas; `Decimal128` para importes; `Int32` para cantidades; `Boolean` para `activo`.
+Se utilizan `ObjectId` para identificadores y referencias, `Date` para fechas, `Decimal128` para importes, `Int32` para cantidades y `Boolean` para la baja lógica.
 
-### Relaciones y almacenamiento del historial
+### Linking y embedding
 
-- **Linking:** `pedidos.clienteId` referencia a `clientes` y cada `items.productoId` referencia a `productos`.
-- **Embedding:** los ítems se guardan dentro del pedido junto con el nombre, precio unitario, cantidad y subtotal del momento de compra.
-- **Historial:** la modificación o desactivación posterior de un cliente o producto no modifica los pedidos ya registrados.
-- **Integridad:** la aplicación verifica que el cliente y los productos existan y estén activos al crear un pedido.
+- **Linking:** `pedidos.clienteId` referencia a `clientes._id` y `pedidos.items[].productoId` referencia a `productos._id`. Clientes y productos tienen un ciclo de vida independiente y pueden participar en varios pedidos.
+- **Embedding:** el arreglo `pedidos.items` almacena el detalle de cada pedido. Se conservan copias de `nombreProducto` y `precioUnitario` para preservar los valores usados al registrar la compra, incluso si el catálogo se modifica después.
+
+MongoDB no impone estas referencias como claves foráneas. La aplicación comprueba que el cliente y los productos existan y estén activos antes de crear el pedido. Estas comprobaciones y la inserción no forman una transacción entre colecciones.
 
 ### Reglas de negocio
 
-- **Baja lógica:** todos los registros nuevos tienen `activo: true`; la desactivación establece `activo: false`, sin eliminar físicamente documentos. Las consultas habituales excluyen inactivos.
-- **Correo único:** se guarda en minúsculas y sin espacios externos. El módulo de clientes solicita el índice `{ email: 1 }` con `unique: true`, incluso para clientes inactivos. La creación efectiva del índice está pendiente de verificarse en Atlas.
-- **Categorías:** `comidas`, `bebidas` y `postres`.
-- **Precios:** pesos argentinos (ARS), valores positivos con hasta dos decimales; se acepta punto o coma como separador decimal, sin separadores de miles.
-- **Cantidades:** enteros positivos dentro del rango de `Int32` (`1` a `2147483647`).
-- **Importes:** se calculan con `decimal.js` y se almacenan como `Decimal128` mediante cadenas decimales.
-- **Estados de pedidos:** `pendiente` → `entregado` o `cancelado`. No se permiten otras transiciones posteriores. El estado comercial es independiente del campo `activo`.
+- **Baja lógica:** los documentos se crean con `activo: true` y se desactivan mediante `updateOne` con `$set: { activo: false }`. Las consultas habituales de la aplicación excluyen los inactivos. No se utilizan eliminaciones físicas en los módulos CRUD.
+- **Correo único:** la aplicación normaliza el correo a minúsculas y elimina espacios exteriores. El índice único `{ email: 1 }` aplica también a los clientes inactivos.
+- **Categorías de productos:** `comidas`, `bebidas` y `postres`.
+- **Precios:** importes positivos en pesos argentinos (ARS) con hasta dos decimales; se admite punto o coma decimal sin separadores de miles.
+- **Cantidades:** enteros positivos dentro del rango de `Int32`.
+- **Cálculos:** `decimal.js` realiza las operaciones y los resultados se almacenan como `Decimal128`.
+- **Estados de pedidos:** un pedido pasa de `pendiente` a `entregado` o `cancelado`; después no se permiten nuevas transiciones. `estado: cancelado` no equivale a `activo: false`.
+- **Historial:** modificar o desactivar un cliente o producto no altera los ítems ya registrados de pedidos anteriores.
 
-## 6. Instalación, configuración y ejecución
+Más información: [modelo y decisiones de diseño](docs/modelo/modelo.md).
 
-### Requisitos
+Ejemplos ilustrativos en Extended JSON: [clientes](docs/datos-ejemplo/clientes.json), [productos](docs/datos-ejemplo/productos.json) y [pedidos](docs/datos-ejemplo/pedidos.json). Estos archivos describen el modelo y **no son un backup**.
+
+## 5. Instalación y ejecución
+
+### Requisitos previos
 
 - Node.js 24.x y npm.
-- MongoDB Atlas configurado, con permisos y acceso de red adecuados.
-- Git (si se clona el repositorio).
-- MongoDB Database Tools (`mongodump` y `mongorestore`) para respaldo y restauración.
+- Un clúster de MongoDB Atlas accesible y un usuario de base de datos con permisos apropiados para las operaciones requeridas. El módulo de clientes intenta crear/verificar el índice de correo al acceder a él, por lo que se necesitan también los permisos correspondientes si dicho índice se administra desde la aplicación.
+- Acceso de red configurado en Atlas para el equipo que realiza la conexión.
+- MongoDB Database Tools disponibles en `PATH` para ejecutar los respaldos y las restauraciones.
+- Git si se descargará mediante clonación.
 
-### Pasos
+### Descargar el proyecto
 
-Desde la raíz del proyecto:
+```powershell
+git clone https://github.com/CastoGil/foodstore-tpi-bd2.git
+cd foodstore-tpi-bd2
+```
+
+También se puede descomprimir el ZIP de código y abrir una terminal en la carpeta que contiene `package.json`.
+
+### Instalar dependencias
 
 ```powershell
 npm ci
-Copy-Item .env.example .env
 ```
 
-Configurar **únicamente en el equipo local** el archivo `.env`:
+### Configurar Atlas
+
+Crear el archivo `.env` solamente si todavía no existe:
+
+```powershell
+if (-not (Test-Path .env)) {
+    Copy-Item .env.example .env
+}
+```
+
+Completar las variables con la conexión suministrada por el equipo o por la cátedra a través de un canal privado:
 
 ```dotenv
-MONGODB_URI=<cadena-privada-de-conexion>
+MONGODB_URI=<CADENA_DE_CONEXION_PRIVADA>
 MONGODB_DB=foodstore_tpi
 ```
 
-Iniciar la aplicación:
+No subir `.env`, contraseñas ni URI reales al repositorio ni incluirlos en capturas públicas o en el ZIP de código. La plantilla `.env.example` no debe contener credenciales.
+
+### Iniciar Food Store
 
 ```powershell
 npm start
 ```
 
-El menú principal ofrece gestión de clientes, productos, pedidos y salida. La conexión a MongoDB se abre cuando una operación la necesita; ingresar al menú **no prueba la conexión**. Una vez conectado, el programa informa `Conexión con MongoDB establecida.`.
+El menú permite gestionar clientes, productos y pedidos. La conexión a MongoDB se abre cuando una operación la necesita, se reutiliza durante la sesión y se cierra al finalizar.
 
-**Seguridad:** no publicar `.env`, contraseñas ni URIs reales en GitHub, documentación o capturas. `.gitignore` excluye `.env`, `node_modules/` y `resguardos_tpi/`.
+Si aparece un error de configuración o de conexión, revisar `.env`, los permisos del usuario, Network Access en Atlas y la conexión a Internet. Mostrar el menú principal sin consultar documentos **no demuestra** por sí solo conectividad con Atlas.
 
-## 7. Respaldo y recuperación
+## 6. Comunicación cliente-servidor y CRUD
 
-El script `scripts/backup.ps1` está implementado para ejecutar `mongodump` **bajo demanda** desde Windows. Usa rutas relativas, lee `.env` y crea respaldos en `resguardos_tpi/AAAA-MM-DD/`, con archivos BSON, metadatos y `resultado_backup.txt` cuando el proceso finaliza correctamente.
+La aplicación Node.js actúa como cliente de MongoDB Atlas. El operador selecciona una opción en la consola; el programa solicita y valida los datos, envía la operación mediante el driver oficial, espera el resultado con `async`/`await` y muestra la respuesta.
+
+| Operación | Implementación |
+| --- | --- |
+| CREATE | `insertOne` |
+| READ | `find`, `findOne` |
+| UPDATE | `updateOne` con `$set` |
+| DELETE lógico | `updateOne` con `$set: { activo: false }` |
+
+El detalle del pedido se almacena en un único documento mediante embedding, mientras que las relaciones con clientes y productos se expresan mediante referencias `ObjectId`.
+
+## 7. Respaldos y recuperación
+
+### Ejecutar un respaldo manual
+
+Desde la raíz del proyecto, en PowerShell:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\backup.ps1
 ```
 
-El script no filtra por `activo`: debe incluir documentos activos e inactivos. No sobrescribe otro respaldo almacenado en la carpeta correspondiente al mismo día. **Aún falta comprobar su ejecución exitosa contra Atlas**.
+El script lee `MONGODB_URI` y `MONGODB_DB` desde `.env`, utiliza rutas relativas a la ubicación del proyecto y ejecuta `mongodump` sin filtrar por `activo`, por lo que solicita también los documentos desactivados.
 
-El procedimiento de recuperación propuesto utiliza `mongorestore` sobre una base de ensayo separada. Los objetivos documentados son **RPO de 24 horas** y **RTO de 60 minutos**, ambos **propuestos y no verificados**. No hay una tarea periódica de respaldo instalada; por eso todavía no se garantiza el RPO.
+Los respaldos nuevos se organizan en carpetas independientes por **fecha y hora**:
 
-Más detalles: [Aplicación y respaldo](docs/informe/aplicacion-y-respaldo.md) y [RTO/RPO](docs/informe/rto-rpo.md).
+```text
+resguardos_tpi/
+  AAAA-MM-DD/
+    HH-mm-ss/
+      foodstore_tpi/
+        clientes.bson
+        clientes.metadata.json
+        productos.bson
+        productos.metadata.json
+        pedidos.bson
+        pedidos.metadata.json
+      resultado_backup.txt
+```
 
-## 8. Documentación y plan de pruebas
+`mongodump` puede incluir archivos auxiliares adicionales. El script comprueba el código de salida y que se hayan generado archivos BSON; si la ejecución es exitosa, registra la fecha, la duración y el resultado en `resultado_backup.txt`. Los respaldos anteriores no se sobrescriben. La copia inicial del 20/10/2026 conserva la estructura anterior, con carpeta por día.
 
-Se incorporaron al repositorio los siguientes documentos:
+### Ejecuciones de respaldo comprobadas
 
-- [Guía técnica de integración y evidencias](docs/informe/guia-integracion-y-evidencias.md): arquitectura, conexión, integración con Atlas, respaldo, recuperación y evidencias.
-- [Plan de pruebas funcionales y de integración](docs/pruebas/plan-de-pruebas.md): **41 casos de prueba** con acciones, resultados esperados y estados de seguimiento.
-- [Aplicación y mecanismo de respaldo](docs/informe/aplicacion-y-respaldo.md).
-- [Objetivos de recuperación RTO/RPO](docs/informe/rto-rpo.md).
-- [Registro de ejecución y evidencias](docs/pruebas/registro-ejecucion.md): estado real de pruebas locales, capturas faltantes y próximos pasos.
-- [Borrador unificado del informe final](docs/informe/borrador-informe-final.md): base redactada para integrar el modelo de Maca y las pruebas contra Atlas.
+| Ejecución | Documentos | Archivos BSON | Duración registrada | Resultado |
+| --- | ---: | ---: | ---: | --- |
+| 20/10/2026, 22:48 | 18 | 3 | **8,21 s** | Código 0 |
+| 21/10/2026, 00:50 | 18 | 3 | **1,93 s** | Código 0 |
+| 21/10/2026, 01:22 | 18 | 3 | **2,02 s** | Código 0 |
 
-**Evidencias locales incorporadas (18/10/2026):** siete capturas de navegación/validaciones, incluida la salida APP-01, en `docs/capturas/aplicacion/`, y una de BAK-01 en `docs/capturas/backup/`. Las capturas reales de Atlas siguen pendientes. Ver [registro de ejecución](docs/pruebas/registro-ejecucion.md) para el estado por caso.
+En las tres ejecuciones se respaldaron cinco clientes, ocho productos y cinco pedidos. El último respaldo se realizó después de corregir una inconsistencia de precio unitario en un pedido de ejemplo. Los respaldos anteriores se conservan como evidencia histórica; sus contenidos no se modificaron.
 
-## 9. Responsabilidades del equipo
+El primer respaldo tuvo un tamaño de **3.904 bytes (3,81 KB)** sumando sus siete archivos internos de datos y metadatos, sin el registro `resultado_backup.txt`.
 
-| Responsable | Actividades principales |
+Evidencias: [respaldo exitoso](docs/capturas/backup/BAK-02-respaldo-exitoso.png) y [archivos generados](docs/capturas/backup/BAK-03-archivos-respaldo.png).
+
+### Restauración de prueba realizada
+
+El 21/10/2026 se restauró la copia del **20/10/2026** en una base separada, `foodstore_tpi_restore_test`, usando `mongorestore`, con una simulación previa mediante `--dryRun` y remapeo de namespaces `--nsFrom`/`--nsTo`. No se sobrescribió la base principal.
+
+| Verificación | Resultado observado |
 | --- | --- |
-| **Maca** | Descripción del negocio; modelo NoSQL; ejemplos JSON; configuración de Atlas, usuarios, acceso de red, colecciones e índice de correo; documentación y capturas de infraestructura. |
-| **Ricardo** | Proyecto Node.js; conexión; menús y CRUD; validaciones; baja lógica; script de respaldo; RTO/RPO; evidencias de aplicación y backup; instrucciones y ZIP. |
-| **Ambos** | Acordar cambios de modelo; integrar y probar con Atlas; verificar historial y respaldo; reunir evidencias; consolidar PDF y ZIP; preparar defensa oral. |
+| Documentos restaurados | **18** |
+| Documentos fallidos | **0** |
+| Duración medida de `mongorestore` | **2,43 s** |
+| Código de salida | **0** |
+| Colección `clientes` | 5 documentos |
+| Colección `productos` | 8 documentos |
+| Colección `pedidos` | 5 documentos |
+| Índice `email_1` único | Verificado |
 
-## 10. Estado del proyecto al 18/10/2026
+A continuación, se ejecutó temporalmente Food Store utilizando `MONGODB_DB=foodstore_tpi_restore_test`, sin modificar el archivo `.env`, y se comprobaron consultas desde los tres menús: **4 clientes activos, 6 productos activos y 5 pedidos activos** en esa copia y en aquel momento.
 
-### Comprobaciones locales reportadas
+Las evidencias se encuentran en [restauración exitosa](docs/capturas/backup/BKP-02-restauracion-exitosa.png), [verificación con mongosh](docs/capturas/backup/BKP-03-verificacion-datos-restaurados.png), [clientes](docs/capturas/backup/BKP-04-validacion-clientes.png), [productos](docs/capturas/backup/BKP-05-validacion-productos.png) y [pedidos](docs/capturas/backup/BKP-06-validacion-pedidos.png).
 
-- Disponibilidad de Node.js, npm y dependencias.
-- Revisión de sintaxis de los seis archivos JavaScript.
-- Navegación de los tres menús y manejo de opciones inválidas; cierre correcto del programa confirmado con captura. APP-01 aprobada.
-- Manejo de `MONGODB_URI` vacía sin cierre abrupto de la aplicación.
-- **26 comprobaciones de lógica con datos simulados**, según el registro previo del proyecto.
-- Disponibilidad de `mongodump` y `mongorestore` (versión reportada: `100.19.1`).
-- Ejecución de `backup.ps1` sin URI: mensaje explicativo y código de salida `1`; evidencia BAK-01 publicada.
-- Guía técnica, plan de 41 pruebas y registro de ejecución publicados. Capturas locales APP-01 (aprobada), APP-02, APP-03 y BAK-01 incorporadas al repositorio.
+La copia del 21/10/2026 a las 01:22, creada después de la corrección del pedido, **no se restauró de manera independiente**. No debe confundirse su respaldo exitoso con una prueba de restauración de ese archivo concreto.
 
-Estas comprobaciones locales **no equivalen** a una validación de persistencia real.
+### Objetivos RTO y RPO
 
-### Pendiente de integración y evidencias
+- **RPO propuesto: 24 horas.** Es la antigüedad máxima tolerable de datos perdidos, expresada en tiempo. El respaldo actualmente se inicia manualmente y no existe una tarea periódica supervisada: **el RPO no está garantizado**.
+- **RTO propuesto: 60 minutos.** Es la meta para recuperar el servicio completo. El tiempo de ejecución de `mongorestore` (2,43 s) **no es el RTO integral**; no se cronometró conjuntamente la detección del incidente, preparación, restauración y recuperación de uso de la aplicación.
 
-- [ ] Finalizar configuración de Atlas e incorporar la URI localmente.
-- [ ] Comprobar conectividad, permisos y acceso de red.
-- [ ] Ejecutar CRUD de clientes, productos y pedidos contra Atlas.
-- [ ] Verificar el índice único de correo y el rechazo de duplicados.
-- [ ] Comprobar baja lógica, integridad de referencias, tipos BSON y conservación del historial.
-- [ ] Validar subtotales, total, estados de pedidos y consultas de activos.
-- [ ] Ejecutar un respaldo real; comprobar BSON, metadatos y registro.
-- [ ] Ensayar recuperación en una base independiente, si se incluye esa prueba.
-- [ ] Completar capturas, resultados de pruebas y mediciones reales de recuperación.
-- [ ] Incorporar documentación de Maca y unificar el informe PDF.
-- [ ] Preparar ZIP final y defensa oral.
+Detalles y limitaciones: [informe RTO/RPO](docs/informe/rto-rpo.md).
 
-**Criterio de avance:** una funcionalidad implementada solo se declarará probada cuando exista un resultado real y verificable.
+## 8. Pruebas funcionales y evidencias
+
+Se realizaron pruebas manuales de conexión, operaciones CRUD, validaciones, bajas lógicas, estados de pedidos, conservación del detalle histórico, respaldo y recuperación. El [plan de pruebas](docs/pruebas/plan-de-pruebas.md) distingue las verificaciones realizadas de los casos complementarios; el [registro de ejecución](docs/pruebas/registro-ejecucion.md) conserva resultados y evidencias.
+
+Entre las comprobaciones observadas se incluyen:
+
+- Alta y consulta de clientes y productos; rechazo de correo duplicado y de determinados valores inválidos.
+- Modificación y baja lógica de clientes y productos, con exclusión de las consultas habituales.
+- Creación de pedidos, cálculo de sus importes y conservación del detalle ante cambios de productos.
+- Cambios válidos de estado y rechazo de transiciones posteriores no admitidas.
+- **PED-13:** el pedido terminado en `d7f5` permanece almacenado en `foodstore_tpi` con `activo: false`, y el menú de pedidos activos muestra cuatro pedidos sin incluirlo. La base restaurada conserva `activo: true` para ese mismo documento, compatible con el estado de la copia anterior.
+- **Integridad de importes:** el 21/10/2026 se corrigió un dato de ejemplo del precio unitario de Pizza Muzzarella en un pedido; luego se analizaron los cinco pedidos de la base principal, con **cinco correctos y cero inconsistencias aritméticas**.
+
+Capturas destacadas: [baja de pedido](docs/capturas/aplicacion/PED-13-baja-logica-pedido.png), [listado posterior a la baja](docs/capturas/aplicacion/PED-13-listado-tras-baja.png), [conexión y clientes en Atlas](docs/capturas/aplicacion/APP-02-clientes-atlas.png) e [índice único de correo](docs/capturas/atlas/indice_email_unique.png).
+
+Las demás capturas se encuentran en [Atlas](docs/capturas/atlas/), [Aplicación](docs/capturas/aplicacion/) y [Backup y recuperación](docs/capturas/backup/). La existencia de capturas no sustituye la interpretación de su alcance documentado en el registro de ejecución.
+
+## 9. Estado documental y alcance pendiente
+
+Están implementados y tienen comprobaciones reales los tres módulos CRUD, la baja lógica, la conexión a Atlas, el respaldo y la recuperación de una copia de prueba. El RPO y el RTO se mantienen como objetivos académicos, sin garantía operativa integral.
+
+Para cerrar la entrega todavía resta:
+
+1. Revisar y unificar los documentos auxiliares que describen estados anteriores del proyecto.
+2. Terminar el informe general con descripción del negocio, modelo, JSON, evidencias, CRUD, respaldo, RTO/RPO y conclusión sobre la comunicación cliente-servidor y el trabajo realizado; exportarlo a PDF.
+3. Revisar y publicar de manera consciente los cambios locales pendientes del repositorio.
+4. Construir y validar un ZIP limpio de código y documentación, excluyendo `.env`, `node_modules/`, `.git/` y `resguardos_tpi/`.
+5. Organizar las credenciales de corrección a través del canal privado indicado por la cátedra y preparar la defensa oral de ambos integrantes.
+
+No se incluye una suite de pruebas automáticas; las verificaciones documentadas son principalmente manuales. El proyecto tampoco garantiza transacciones entre colecciones ni automatización periódica de respaldos.
+
+## 10. Responsabilidades del equipo
+
+| Integrante | Trabajo principal |
+| --- | --- |
+| Maca | Negocio, modelo, ejemplos JSON, configuración de Atlas, usuarios, red, índice de correo y documentación de infraestructura |
+| Ricardo | Aplicación Node.js, conexión, menús, CRUD, validaciones, baja lógica, script de respaldo, evidencias y preparación del empaquetado |
+| Ambos | Acuerdos de diseño, integración, revisión, informe final y defensa oral integral |
+
+La división de tareas es organizativa: ambos integrantes deben comprender y poder explicar la totalidad del proyecto durante el coloquio.
 
 ## 11. Entrega
 
-La entrega prevista comprende:
+La consigna solicita:
 
-- Informe final en **PDF**.
-- **ZIP** con código fuente, `package.json`, `package-lock.json`, documentación, scripts y `.env.example`, sin `node_modules/`, `.env` ni respaldos privados.
-- Información de conexión para corrección, por el canal privado que indique la cátedra.
-- Defensa oral de ambos integrantes.
+- **Informe final PDF:** descripción del negocio, modelo y justificación de embedding/linking, ejemplos JSON, capturas, operaciones CRUD, backup, objetivos RTO/RPO y conclusión sobre comunicación cliente-servidor y realización del trabajo.
+- **ZIP de código y scripts:** `src/`, `scripts/`, documentación, `package.json`, `package-lock.json` y `.env.example`, sin dependencias instaladas, historial interno de Git, credenciales ni copias locales de datos.
+- **Acceso para corrección:** credenciales o cadena de conexión por un canal privado habilitado por la cátedra, sin publicar secretos en GitHub.
+- **Coloquio:** los dos integrantes deben poder defender el proyecto completo.
 
+**Fecha de cierre informada:** 31 de octubre de 2026, 23:59.
 
-**Fecha de cierre registrada:** **31 de octubre de 2026 a las 23:59**.
+> **Nota de entrega:** `.gitignore` impide incluir ciertos archivos en commits normales, pero no evita que entren en un ZIP comprimido manualmente. El ZIP definitivo debe comprobarse antes de enviarlo.

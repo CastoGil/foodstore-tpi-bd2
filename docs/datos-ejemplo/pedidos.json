@@ -1,0 +1,33 @@
+{
+  "_id": {
+    "$oid": "6713dc03a1b2c3d4e5f60020"
+  },
+  "clienteId": {
+    "$oid": "6713dc01a1b2c3d4e5f60001"
+  },
+  "fecha": {
+    "$date": "2026-10-18T19:30:00.000Z"
+  },
+  "items": [
+    {
+      "productoId": {
+        "$oid": "6713dc02a1b2c3d4e5f60010"
+      },
+      "nombreProducto": "Hamburguesa Clásica",
+      "precioUnitario": {
+        "$numberDecimal": "10500.00"
+      },
+      "cantidad": {
+        "$numberInt": "2"
+      },
+      "subtotal": {
+        "$numberDecimal": "21000.00"
+      }
+    }
+  ],
+  "total": {
+    "$numberDecimal": "21000.00"
+  },
+  "estado": "pendiente",
+  "activo": true
+}
