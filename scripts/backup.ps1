@@ -7,10 +7,12 @@ Configuracion de Atlas: coordinada con Maca.
 Este script:
 - Lee MONGODB_URI y MONGODB_DB desde el archivo .env.
 - Usa rutas relativas a la ubicacion del proyecto.
-- Crea resguardos_tpi y una subcarpeta con la fecha actual.
+- Crea resguardos_tpi y subcarpetas por fecha y hora.
+- Permite generar varios respaldos en un mismo dia.
 - Ejecuta mongodump para respaldar la base completa.
 - Incluye los documentos activos e inactivos.
 - Comprueba el codigo de salida de mongodump.
+- Registra la duracion y el resultado del respaldo.
 
 No escribir credenciales dentro de este archivo.
 #>
@@ -73,6 +75,7 @@ try {
         throw "Falta configurar MONGODB_DB en el archivo .env."
     }
 
+    # Verificamos que mongodump este disponible.
     $herramienta = Get-Command mongodump -CommandType Application `
         -ErrorAction SilentlyContinue |
         Select-Object -First 1
@@ -81,17 +84,21 @@ try {
         throw "No se encontro mongodump. Instala MongoDB Database Tools y configura su carpeta bin en PATH."
     }
 
-    $fechaActual = Get-Date -Format "yyyy-MM-dd"
+    # Generamos carpetas independientes por fecha y hora.
+    $momentoActual = Get-Date
+    $fechaActual = $momentoActual.ToString("yyyy-MM-dd")
+    $horaActual = $momentoActual.ToString("HH-mm-ss")
 
     $carpetaResguardos = Join-Path $raizProyecto "resguardos_tpi"
-    $carpetaFecha = Join-Path $carpetaResguardos $fechaActual
+    $carpetaDia = Join-Path $carpetaResguardos $fechaActual
+    $carpetaFecha = Join-Path $carpetaDia $horaActual
 
-    # Evitamos mezclar o sobrescribir un respaldo anterior del mismo dia.
+    # Evitamos mezclar o sobrescribir respaldos anteriores.
     if (Test-Path -LiteralPath $carpetaFecha) {
-        throw "Ya existe la carpeta de hoy: $carpetaFecha. Muevela o renombrala antes de generar otro respaldo."
+        throw "Ya existe un respaldo con esta fecha y hora."
     }
 
-    New-Item -ItemType Directory -Path $carpetaResguardos `
+    New-Item -ItemType Directory -Path $carpetaDia `
         -Force | Out-Null
 
     New-Item -ItemType Directory -Path $carpetaFecha |
@@ -117,6 +124,7 @@ try {
         throw "mongodump termino con codigo $codigoSalida. La carpeta puede contener archivos incompletos y no debe considerarse un respaldo valido."
     }
 
+    # Comprobamos que se hayan generado archivos BSON.
     $archivosBson = @(
         Get-ChildItem -LiteralPath $carpetaFecha `
             -Recurse -File -Filter "*.bson"
@@ -126,13 +134,15 @@ try {
         throw "mongodump no genero archivos BSON. Verifica el nombre de la base y que existan las colecciones."
     }
 
+    # Calculamos la duracion del respaldo.
     $finRespaldo = Get-Date
+
     $duracionSegundos = [math]::Round(
         ($finRespaldo - $inicioRespaldo).TotalSeconds,
         2
     )
 
-    # Este registro no contiene credenciales.
+    # Generamos un registro sin incluir credenciales.
     $registro = @(
         "Food Store - Respaldo"
         "Base: $nombreBase"
