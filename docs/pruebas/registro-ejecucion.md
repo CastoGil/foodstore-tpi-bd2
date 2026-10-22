@@ -164,11 +164,11 @@ Estas observaciones describen la implementación y las pruebas mencionadas; no a
 
 ## 9. SEG-01 — Empaquetado y datos de acceso
 
-**Estado: pendiente de cierre del ZIP final.**
+**Estado al 22/10/2026: ZIP de entrega generado y verificado (extracción correcta y PDF coincidente por SHA-256).**
 
 El archivo `.gitignore` excluye `.env`, `node_modules/` y `resguardos_tpi/` del seguimiento ordinario de Git. El ZIP de trabajo revisado durante la auditoría sí contenía `.env`, `.git/`, `node_modules/` y respaldos locales, porque comprimir una carpeta no aplica automáticamente las reglas de `.gitignore`.
 
-Para la entrega se debe preparar un ZIP separado sin credenciales, respaldos privados, dependencias instaladas ni historial Git. Deben mantenerse `.env.example`, `package.json`, `package-lock.json`, código fuente y documentación pertinente. Si la cátedra precisa acceso a una base remota, sus credenciales deberán compartirse únicamente por un canal privado autorizado.
+El ZIP de entrega se generó mediante `git archive` a partir de los archivos versionados. No incluye credenciales, respaldos locales, dependencias instaladas ni historial Git; conserva `.env.example`, `package.json`, `package-lock.json`, código fuente, script de respaldo, capturas y documentación. Cualquier nueva modificación en el repositorio requiere regenerar el ZIP desde el último commit. Si la cátedra precisa acceso a Atlas, las credenciales se comparten únicamente por un canal privado autorizado.
 
 ## 10. Cierre y pendientes
 
@@ -176,4 +176,4 @@ Se cuenta con evidencias de conexión a MongoDB Atlas, operaciones principales s
 
 Se corrigió una inconsistencia de precio unitario en un pedido de ejemplo y se verificó la aritmética de los cinco pedidos de la base principal. Los respaldos del 20/10 y del 21/10 conservan sus resultados históricos sin mezclarse.
 
-**Estado de entrega:** los resultados funcionales y la recuperacion estan documentados, y el [PDF final](../informe/informe.pdf) se encuentra preparado. Resta validar el ZIP limpio, coordinar la defensa oral y acordar el acceso privado para evaluacion. Los RTO/RPO siguen siendo objetivos propuestos, no garantias operativas.
+**Estado de entrega al 22/10/2026:** los resultados funcionales y la recuperación están documentados, el [PDF final](../informe/informe.pdf) está publicado y el ZIP de código, scripts y documentación fue generado y validado mediante extracción y comparación SHA-256 del PDF. Tras este último cambio documental debe regenerarse para reflejar el commit vigente. Resta coordinar la defensa oral y el acceso privado para evaluación. Los RTO/RPO siguen siendo objetivos propuestos, no garantías operativas.
