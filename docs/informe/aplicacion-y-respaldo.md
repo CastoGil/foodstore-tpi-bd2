@@ -8,8 +8,6 @@
 
 **Estado del documento:** implementación y pruebas principales verificadas; objetivos RTO/RPO propuestos, sin validación integral de su cumplimiento.
 
-**Última actualización de resultados:** 21/10/2026.
-
 ## 1. Aplicación por consola
 
 Food Store es una aplicación de consola desarrollada con Node.js y el driver nativo de MongoDB. Se comunica con una base de datos alojada en MongoDB Atlas y permite gestionar clientes, productos y pedidos de un comercio gastronómico.

@@ -8,7 +8,6 @@
 
 **Base de recuperación de prueba:** `foodstore_tpi_restore_test`.
 
-**Actualizado:** 21/10/2026.
 
 ## 1. Objetivo y alcance
 
@@ -156,11 +155,11 @@ La comparación del caso PED-13 confirmó la persistencia de la baja en `foodsto
 
 Las operaciones principales del sistema, el respaldo y la recuperación cuentan con evidencias de ejecución. Se confirmó una corrección de datos de ejemplo y se verificó la integridad aritmética de los cinco pedidos de la base principal.
 
-Antes de la entrega definitiva resta:
+El [informe final en PDF](../informe/informe.pdf) ya incorpora los resultados, las evidencias y anexos del proyecto.
 
-1. Unificar README y documentos auxiliares con los resultados y fechas reales.
-2. Completar el informe general, incorporar conclusiones sobre la comunicación cliente-servidor y generar el PDF solicitado.
-3. Preparar un ZIP limpio que conserve el código, los scripts, la documentación y los archivos de dependencias, pero excluya `.env`, `node_modules/`, `.git/` y los respaldos locales con datos.
-4. Comprobar los archivos publicados en GitHub y preparar la explicación oral de ambos integrantes.
+Antes de la entrega integral resta:
+
+1. Generar y validar un ZIP con codigo, scripts y documentacion, excluyendo `.env`, `node_modules/`, `.git/` y los respaldos privados.
+2. Comprobar los entregables, coordinar el acceso para correccion por canal privado y preparar la defensa oral.
 
 El ZIP de trabajo utilizado para la auditoría incluía archivos privados y dependencias instaladas; debe prepararse un paquete separado para la entrega. Las credenciales de acceso para corrección no deben publicarse en el repositorio ni incorporarse al ZIP compartido.

@@ -4,7 +4,6 @@
 **Integrantes:** Ricardo Casto y Macarena Larrosa.
 **Ejecución de la aplicación, pruebas y backups:** Ricardo.
 **Configuración de Atlas y documentación del modelo:** coordinada con Maca.
-**Registro actualizado:** 21/10/2026.
 **Bases utilizadas:** `foodstore_tpi` (principal) y `foodstore_tpi_restore_test` (recuperación de prueba).
 
 Este registro complementa el [plan de pruebas](plan-de-pruebas.md). Reúne resultados observados en salidas de consola, capturas y verificaciones realizadas durante el desarrollo de Food Store. Distingue pruebas ejecutadas, revisión del código, limitaciones y tareas pendientes.
@@ -177,4 +176,4 @@ Se cuenta con evidencias de conexión a MongoDB Atlas, operaciones principales s
 
 Se corrigió una inconsistencia de precio unitario en un pedido de ejemplo y se verificó la aritmética de los cinco pedidos de la base principal. Los respaldos del 20/10 y del 21/10 conservan sus resultados históricos sin mezclarse.
 
-**Pendientes:** actualizar los documentos auxiliares y el README, completar el informe final y exportarlo a PDF, verificar el paquete ZIP de entrega y preparar la explicación oral. El caso PED-13 quedó comprobado mediante persistencia y consulta funcional; los objetivos de RTO y RPO siguen siendo metas propuestas, no garantías operativas.
+**Estado de entrega:** los resultados funcionales y la recuperacion estan documentados, y el [PDF final](../informe/informe.pdf) se encuentra preparado. Resta validar el ZIP limpio, coordinar la defensa oral y acordar el acceso privado para evaluacion. Los RTO/RPO siguen siendo objetivos propuestos, no garantias operativas.

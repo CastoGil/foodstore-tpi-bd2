@@ -4,9 +4,7 @@
 
 **Integrantes:** Ricardo Casto y Macarena Larrosa.
 
-**Actualización:** 21/10/2026.
-
-**Estado:** integración funcional, respaldos y restauración de prueba comprobados; informe PDF y ZIP definitivo pendientes de cierre.
+**Estado:** integracion funcional, respaldo, restauracion de prueba e informe final en PDF completados; ZIP y defensa oral pendientes de cierre.
 
 Esta guía complementa el [README](../../README.md), el documento [Aplicación y respaldo](aplicacion-y-respaldo.md), el [informe RTO/RPO](rto-rpo.md), el [modelo NoSQL](../modelo/modelo.md) y los documentos de [planificación](../pruebas/plan-de-pruebas.md) y [ejecución de pruebas](../pruebas/registro-ejecucion.md). No reemplaza las evidencias ni el informe final.
 
@@ -207,6 +205,6 @@ Para la entrega, la consigna solicita un **informe PDF** y un **ZIP de código y
 
 El paquete final debe conservar código fuente, `scripts/backup.ps1`, documentación, `package.json`, `package-lock.json` y `.env.example`, pero **excluir** `.env`, `node_modules/`, `.git/` y `resguardos_tpi/`. Las credenciales necesarias para la corrección se comparten únicamente por el canal privado dispuesto por la cátedra.
 
-**Pendientes documentales de cierre:** integrar un informe final coherente, revisar capturas y enlaces, exportar y verificar el PDF, preparar el ZIP limpio, revisar cambios locales frente a GitHub y ensayar la defensa oral. El desarrollo cuenta con pruebas funcionales y de recuperación, pero no se afirma que las metas RTO/RPO estén garantizadas ni que haya pruebas automatizadas exhaustivas.
+**Cierre documental:** el [PDF final](informe.pdf) se encuentra incorporado al proyecto. Resta preparar y verificar el ZIP limpio, coordinar el acceso privado para correccion y organizar la defensa oral. Los objetivos RTO/RPO siguen pendientes de una validacion operativa integral.
 
 **Fecha de cierre consignada en el proyecto:** 31/10/2026 a las 23:59 (verificarla con la publicación vigente de la cátedra antes de entregar).

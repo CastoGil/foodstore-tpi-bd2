@@ -156,31 +156,42 @@ Estas estructuras describen el modelo de la aplicación; **no se afirma haber co
 ```
 
 ### 6.4. Ejemplo de pedido en Extended JSON
-``json
+
+```json
 {
-  "_id": { "$oid": "6713dc03a1b2c3d4e5f60020" },
-  "clienteId": { "$oid": "6713dc01a1b2c3d4e5f60001" },
-  "fecha": { "$date": "2026-10-18T19:30:00.000Z" },
+  "_id": {
+    "$oid": "6713dc03a1b2c3d4e5f60020"
+  },
+  "clienteId": {
+    "$oid": "6713dc01a1b2c3d4e5f60001"
+  },
+  "fecha": {
+    "$date": "2026-10-18T19:30:00.000Z"
+  },
   "items": [
     {
-      "productoId": { "$oid": "6713dc02a1b2c3d4e5f60010" },
+      "productoId": {
+        "$oid": "6713dc02a1b2c3d4e5f60010"
+      },
       "nombreProducto": "Hamburguesa Clásica",
-      "precioUnitario": { "$numberDecimal": "10500.00" },
-      "cantidad": { "$numberInt": "2" },
-      "subtotal": { "$numberDecimal": "21000.00" }
-    },
-    {
-      "productoId": { "$oid": "6713dc02a1b2c3d4e5f60012" },
-      "nombreProducto": "Gaseosa Coca cola 500ml",
-      "precioUnitario": { "$numberDecimal": "2500.00" },
-      "cantidad": { "$numberInt": "1" },
-      "subtotal": { "$numberDecimal": "2500.00" }
+      "precioUnitario": {
+        "$numberDecimal": "10500.00"
+      },
+      "cantidad": {
+        "$numberInt": "2"
+      },
+      "subtotal": {
+        "$numberDecimal": "21000.00"
+      }
     }
   ],
-  "total": { "$numberDecimal": "23500.00" },
+  "total": {
+    "$numberDecimal": "21000.00"
+  },
   "estado": "pendiente",
   "activo": true
 }
+```
 
 Los tres fragmentos corresponden a **ejemplos ilustrativos**, no a un volcado de la base actual. También están disponibles como archivos de texto: [clientes.json](../datos-ejemplo/clientes.json), [productos.json](../datos-ejemplo/productos.json) y [pedidos.json](../datos-ejemplo/pedidos.json).
 
@@ -390,18 +401,10 @@ El trabajo requirió coordinar el modelo, la configuración de Atlas, la impleme
 
 ---
 
-## 14. Material complementario y preparación de la entrega
+## 14. Material complementario
 
-Se adjuntan o referencian los siguientes elementos:
+Como complemento del presente informe, el repositorio Food Store contiene el codigo fuente de la aplicacion, el modelo documental NoSQL, los ejemplos JSON, el script de respaldo y la documentacion de las pruebas realizadas.
 
-- [Modelo NoSQL y decisiones de diseño](../modelo/modelo.md).
-- [Ejemplos de documentos JSON](../datos-ejemplo/).
-- [Aplicación y mecanismo de respaldo](aplicacion-y-respaldo.md).
-- [Plan de pruebas](../pruebas/plan-de-pruebas.md) y [registro de ejecución](../pruebas/registro-ejecucion.md).
-- [Guía de integración y evidencias](guia-integracion-y-evidencias.md).
-- [Informe detallado RTO/RPO](rto-rpo.md).
-- [README del repositorio](../../README.md).
+**Informe tecnico final en PDF:** [informe.pdf](informe.pdf) (33 paginas, con evidencias y fragmentos del codigo).
 
-**Entrega solicitada:** informe final en PDF y ZIP con código fuente, scripts y documentación. Antes de enviarlo, se deberá excluir `.env`, `node_modules/`, `.git/` y `resguardos_tpi/` del ZIP público, así como revisar que las capturas no revelen credenciales. La conexión para corrección corresponde al canal privado establecido por la cátedra.
-
-**Fecha de entrega indicada en la documentación del proyecto:** 31/10/2026 a las 23:59. Conviene confirmarla con la consigna vigente antes del envío.
+**Repositorio del proyecto:** https://github.com/CastoGil/foodstore-tpi-bd2

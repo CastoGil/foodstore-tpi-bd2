@@ -246,19 +246,15 @@ Capturas destacadas: [baja de pedido](docs/capturas/aplicacion/PED-13-baja-logic
 
 Las demás capturas se encuentran en [Atlas](docs/capturas/atlas/), [Aplicación](docs/capturas/aplicacion/) y [Backup y recuperación](docs/capturas/backup/). La existencia de capturas no sustituye la interpretación de su alcance documentado en el registro de ejecución.
 
-## 9. Estado documental y alcance pendiente
+## 9. Estado documental y pasos restantes
 
-Están implementados y tienen comprobaciones reales los tres módulos CRUD, la baja lógica, la conexión a Atlas, el respaldo y la recuperación de una copia de prueba. El RPO y el RTO se mantienen como objetivos académicos, sin garantía operativa integral.
+La implementacion de los tres modulos, las bajas logicas, la conexion a Atlas, los respaldos y la restauracion de prueba cuentan con verificaciones documentadas.
 
-Para cerrar la entrega todavía resta:
+**Informe final:** el [PDF de Food Store](docs/informe/informe.pdf) (33 paginas) incluye los esquemas JSON, las capturas, las pruebas, los resultados de backup y restauracion, los objetivos RTO/RPO y dos anexos de evidencias y codigo.
 
-1. Revisar y unificar los documentos auxiliares que describen estados anteriores del proyecto.
-2. Terminar el informe general con descripción del negocio, modelo, JSON, evidencias, CRUD, respaldo, RTO/RPO y conclusión sobre la comunicación cliente-servidor y el trabajo realizado; exportarlo a PDF.
-3. Revisar y publicar de manera consciente los cambios locales pendientes del repositorio.
-4. Construir y validar un ZIP limpio de código y documentación, excluyendo `.env`, `node_modules/`, `.git/` y `resguardos_tpi/`.
-5. Organizar las credenciales de corrección a través del canal privado indicado por la cátedra y preparar la defensa oral de ambos integrantes.
+**Pasos restantes para la entrega integral:** generar y comprobar el ZIP limpio del proyecto, coordinar el acceso de correccion por el canal privado de la catedra y preparar la defensa oral de ambos integrantes.
 
-No se incluye una suite de pruebas automáticas; las verificaciones documentadas son principalmente manuales. El proyecto tampoco garantiza transacciones entre colecciones ni automatización periódica de respaldos.
+No se incluye una suite de pruebas automatizadas. El RPO de 24 horas y el RTO de 60 minutos son objetivos de planificacion y no se declaran garantizados.
 
 ## 10. Responsabilidades del equipo
 
